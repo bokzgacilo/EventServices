@@ -1,0 +1,632 @@
+.popUp{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(90, 90, 90, 0.329);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+button,a{
+    cursor: pointer;
+}
+.popUp-content{
+    position: relative;
+    z-index: 1000;
+    width: 530px;
+    height: 643px;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255);
+    justify-content: center;
+    align-items: center;
+}
+.back-Button {
+    position: absolute;
+}
+.back-Button a img{
+    margin-top: 15px;
+    margin-left: 15px;
+    width: 53px;
+    height: 53px;
+    transition: transform 0.3s ease-in-out;
+}
+.back-Button a img:hover{
+    transform: scale(0.8);
+}
+.back-Button button{
+    background-color: rgba(255, 0, 0, 0);
+    border: none;
+}
+.customer-login p{
+
+    position: absolute;
+    width: 236px;
+    height: 42px;
+    left: 185px;
+    top: 22px;
+    font-family: 'Bebas Neue';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 35px;
+    line-height: 42px;
+    color: #000000;
+
+
+}
+.username{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 6px;
+    gap: 10px;
+    position: absolute;
+    width: 446px;
+    height: 56px;
+    left: 40px;
+    top: 92px;
+    background: #FFFEFE;
+    border: 1px solid #666666;
+    border-radius: 15px;
+    font-size: 30px;
+    font-weight: 400;
+    font-family: "Bell MT",serif;
+    
+
+}
+.pass{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 6px;
+    gap: 10px;
+    position: absolute;
+    width: 446px;
+    height: 56px;
+    left: 42px;
+    top: 198px;
+    background: #FFFFFF;
+    border: 1px solid #666666;
+    border-radius: 15px;
+    font-size: 30px;
+    font-weight: 400;
+    font-family: "Bell MT",serif;
+
+}
+form input::placeholder{
+    color: #00000054;
+}
+.login-box button{
+    width: 256px;
+    height: 66px;
+    background-color: rgba(169, 137, 137, 1);
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    left: 137px;
+    top: 316px;
+    box-shadow: 5px 5px 10px rgba(78, 78, 78, 0.5);
+    transition: transform 0.2s ease-in-out;
+}
+.login-box button:hover,.createAcc button:hover{
+    transform: scale(0.9);
+    box-shadow: 5px 5px 10px rgba(78, 78, 78, 0);
+    background-color: rgb(131, 106, 106);
+}
+
+.login-box a{
+    text-decoration: none;
+    color: black;
+    font-family: "Bell MT",serif;
+    font-size: 35px;
+    font-weight: 400;
+}
+.line{
+    position: absolute;
+    width: 255px;
+    height: 0px;
+    left: 137px;
+    top: 455.02px;
+    background: #000000;
+    border: 1px solid #000000;
+    transform: rotate(0deg);
+
+}
+.forgot-pass a{
+    text-decoration: none;
+    position: absolute;
+    width: 120px;
+    height: 17px;
+    left: 210px;
+    top: 403px;
+    font-family: 'Bell MT';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 17px;
+    color: #000000;
+
+}
+.forgot-pass a:hover{
+    width: 120px;
+    font-weight: 800;
+}
+.createAcc button{
+    position: absolute;
+    width: 194px;
+    height: 58px;
+    left: 168px;
+    top: 490px;
+    background-color: rgba(169, 137, 137, 1);
+    border-radius: 15px;
+    border: none;
+    box-shadow: 5px 5px 10px rgba(78, 78, 78, 0.5);
+    transition: transform 0.2s ease-in-out;
+}
+
+.createAcc button{
+    text-decoration: none;
+    font-family: 'Bell MT';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 22px;
+    color: #000000;
+}
+.admin-acc a{
+    position: absolute;
+    width: 120px;
+    height: 17px;
+    left: 217px;
+    top: 562px;
+    font-family: 'Bell MT';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 17px;
+    color: #000000;
+    transition: font-weight 0.2s ease-in-out;
+}
+.admin-acc a:hover{
+    font-weight: 800;
+}
+
+.hidden{
+    display: none;
+}
+/* ADMIN LOGIN */
+.ADpopUp{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(90, 90, 90, 0.329);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.ADpopUp-content{
+    position: relative;
+    z-index: 1000;
+    width: 530px;
+    height: 643px;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255);
+    justify-content: center;
+    align-items: center;
+}
+.ADback-Button {
+    position: absolute;
+}
+.ADback-Button a img{
+    margin-top: 15px;
+    margin-left: 15px;
+    width: 53px;
+    height: 53px;
+    transition: transform 0.3s ease-in-out;
+}
+.ADback-Button a img:hover{
+    transform: scale(0.8);
+}
+.ADback-Button button{
+    background-color: rgba(255, 0, 0, 0);
+    border: none;
+}
+.Admin-login p{
+
+    position: absolute;
+    width: 236px;
+    height: 42px;
+    left: 185px;
+    top: 22px;
+    font-family: 'Bebas Neue';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 35px;
+    line-height: 42px;
+    color: #000000;
+
+
+}
+.username{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 6px;
+    gap: 10px;
+    position: absolute;
+    width: 446px;
+    height: 56px;
+    left: 40px;
+    top: 92px;
+    background: #FFFEFE;
+    border: 1px solid #666666;
+    border-radius: 15px;
+    font-size: 30px;
+    font-weight: 400;
+    font-family: "Bell MT",serif;
+    
+
+}
+.pass{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 6px;
+    gap: 10px;
+    position: absolute;
+    width: 446px;
+    height: 56px;
+    left: 42px;
+    top: 198px;
+    background: #FFFFFF;
+    border: 1px solid #666666;
+    border-radius: 15px;
+    font-size: 30px;
+    font-weight: 400;
+    font-family: "Bell MT",serif;
+
+}
+form input::placeholder{
+    color: #00000054;
+}
+.login-box button{
+    width: 256px;
+    height: 66px;
+    background-color: rgba(169, 137, 137, 1);
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    left: 137px;
+    top: 316px;
+}
+.login-box a{
+    text-decoration: none;
+    color: black;
+    font-family: "Bell MT",serif;
+    font-size: 35px;
+    font-weight: 400;
+}
+.forgot-pass a{
+    text-decoration: none;
+    position: absolute;
+    width: 120px;
+    height: 17px;
+    left: 210px;
+    top: 403px;
+    font-family: 'Bell MT';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 17px;
+    color: #000000;
+
+}
+.ADhidden{
+    display: none;
+}
+
+/* Sign Up*/
+
+.SPpopUp{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(90, 90, 90, 0.329);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+.SPpopUp-content{
+    position: relative;
+    z-index: 1000;
+    width: 530px;
+    height: 643px;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255);
+    justify-content: center;
+    align-items: center;
+}
+.SPback-Button {
+    position: absolute;
+}
+.SPback-Button a img{
+    margin-top: 15px;
+    margin-left: 15px;
+    width: 53px;
+    height: 53px;
+    transition: transform 0.3s ease-in-out;
+}
+.SPback-Button a img:hover{
+    transform: scale(0.8);
+}
+.SPback-Button button{
+    background-color: rgba(255, 0, 0, 0);
+    border: none;
+}
+.SignUp p{
+    position: absolute;
+    width: 236px;
+    height: 42px;
+    left: 225px;
+    top: 22px;
+    font-family: 'Bebas Neue';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 35px;
+    line-height: 42px;
+    color: #000000;
+
+
+}
+.username{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 6px;
+    gap: 10px;
+    position: absolute;
+    width: 446px;
+    height: 56px;
+    left: 40px;
+    top: 92px;
+    background: #FFFEFE;
+    border: 1px solid #666666;
+    border-radius: 15px;
+    font-size: 30px;
+    font-weight: 400;
+    font-family: "Bell MT",serif;
+    
+
+}
+.pass{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 6px;
+    gap: 10px;
+    position: absolute;
+    width: 446px;
+    height: 56px;
+    left: 42px;
+    top: 198px;
+    background: #FFFFFF;
+    border: 1px solid #666666;
+    border-radius: 15px;
+    font-size: 30px;
+    font-weight: 400;
+    font-family: "Bell MT",serif;
+
+}
+.confirm{
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0px 6px;
+    gap: 10px;
+    position: absolute;
+    width: 446px;
+    height: 56px;
+    left: 42px;
+    top: 304px;
+    background: #FFFFFF;
+    border: 1px solid #666666;
+    border-radius: 15px;
+    font-size: 30px;
+    font-weight: 400;
+    font-family: "Bell MT",serif;
+}
+form input::placeholder{
+    color: #00000054;
+}
+.SignUP-box button{
+    width: 256px;
+    height: 66px;
+    background-color: rgba(169, 137, 137, 1);
+    border: none;
+    border-radius: 15px;
+    position: absolute;
+    left: 137px;
+    top: 416px;
+    transition: transform 0.2s ease-in-out;
+    box-shadow: 5px 5px 10px rgba(78, 78, 78, 0.5);
+}
+.SignUP-box button:hover{
+    transform: scale(0.9);
+    box-shadow: 5px 5px 10px rgba(78, 78, 78, 0);
+    background-color: rgb(131, 106, 106);
+}
+.SignUP-box a{
+    text-decoration: none;
+    color: black;
+    font-family: "Bell MT",serif;
+    font-size: 35px;
+    font-weight: 400;
+}
+.cancel a{
+    text-decoration: none;
+    position: absolute;
+    width: 110px;
+    height: 17px;
+    left: 210px;
+    top: 503px;
+    font-family: 'Bell MT';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 17px;
+    color: #000000;
+
+}
+.cancel a:hover,.cancel2 a:hover{
+    font-weight: 800;
+}
+
+.SPhidden{
+    display: none;
+}
+.SPback-Button2 {
+    position: absolute;
+}
+.SPback-Button2 a img{
+    margin-top: 15px;
+    margin-left: 15px;
+    width: 53px;
+    height: 53px;
+    transition: transform 0.3s ease-in-out;
+}
+.SPback-Button2 a img:hover{
+    transform: scale(0.8);
+}
+.SPback-Button2 button{
+    background-color: rgba(255, 0, 0, 0);
+    border: none;
+}
+.cancel2 a{
+    text-decoration: none;
+    position: absolute;
+    width: 110px;
+    height: 17px;
+    left: 210px;
+    top: 503px;
+    font-family: 'Bell MT';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 17px;
+    color: #000000;
+}
+
+/* FEEDBACK */
+.feedbackPopup{
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(90, 90, 90, 0.329);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.feedback-content{
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    z-index: 1000;
+    width: 530px;
+    height: 643px;
+    border-radius: 20px;
+    background-color: rgb(255, 255, 255);
+    align-items: center;
+}
+.feedback-back{
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+.feedback-back a img{ 
+    margin-top: 15px;
+    margin-left: 15px;
+    width: 43px;
+    height: 43px;
+    transition: transform 0.3s ease-in-out;
+}
+.feedback-back a img:hover{
+    transform: scale(0.8);
+}
+.feedback-back button{
+    background-color: rgba(255, 0, 0, 0);
+    border: none;
+}
+.rate h1{
+    padding-top: 80%;
+    padding-bottom: 20%;
+    font-size: 66px;
+    font-weight: 400;
+    line-height: 79.2px;
+    text-align: left;
+    
+
+}
+.rate h2{
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 36px;
+    text-align: left;
+
+}
+.stars{
+    display: flex;
+}
+.star {
+    color: gold;
+    font-size: 50px;
+    padding-bottom: 10%;
+}
+.star::before{
+    content: "\2605";
+    text-shadow:5px 5px 5px rgba(0, 0, 0, 0.192); 
+    
+}
+.like{
+    display: flex;
+}
+.like img{
+    height: 50px;
+    margin: 30px 30px;
+}
+.submit{
+    margin-top: 5%;
+}
+.submit a{
+    border-radius: 10px;
+    padding: 15px 34px;
+    color: #000000;
+    text-decoration: none;
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 36px;
+    text-align: left;
+    background-color: rgba(169, 137, 137, 1);
+}
+
+.feedbackhidden{
+    display: none;
+}

@@ -1,0 +1,166 @@
+@media (max-width: 1440px){   /*ako na mag adjust haha*/
+    /* navbar */
+    nav {
+        height: 75px;
+    }
+    .logo img{
+        width: 125px;
+        height: 128px;
+        
+    }
+    .logo a {
+        position: absolute;
+        margin-left: 110px;
+        font-size: 20px;
+        line-height: 25.6px;
+        font-weight: 700;
+        
+    }
+    .nav-links a{
+        font-size: 25px;
+        padding: 25px 25px;
+    }
+    .slider {
+        height: 900px;
+    }
+    .slide img {
+        height: 900px;
+    }
+    .reservation button{
+        margin-left: 83%;
+        width: 220px;
+        height: 50px;
+    }
+    .reservation a{
+        font-size: 15px;
+    }
+    .messange button{
+        width: 85px;
+        height: 85px;
+        margin-top: 54%;
+    }
+    .messange button a img{
+        width: 45px;
+        height: 37px;
+    }
+    /* events */
+    .event-item img{
+        width: 302px;
+        height: 342px;
+    }
+    /* WHAT WE OFFER SECTION   */
+
+    .offer-section{
+        padding: 100px 87px;
+    }
+    .offer-section h2{
+        margin-left: 20px;
+    }
+
+    .catering-item1 img{
+        width: 292px;
+        height: 557px;
+    }
+    .catering-description{
+        width: 301px;
+        height: 88px;
+        margin-left: 15px;
+    }
+    .catering-description h3{
+        font-size: 56px;
+    }
+    .catering-description p{
+        font-size: 15px;
+        color: rgba(199, 180, 180, 1);
+    }
+    .catering-description img{
+        margin-top: 15px;
+        width: 315px;
+        height: 330px;
+    }
+    .catering-item3{
+        margin-left: 40px;
+    }
+    .catering-item3 img{
+        width: 315px;
+        height: 330px;
+    }
+    .catering-item3 p{
+        margin-top: 47px;
+        width: 301px;
+        height: 144px;
+        font-size: 15px;
+        color: rgba(199, 180, 180, 1);
+    }
+    .catering-item4{
+        margin-left: 15px;
+    }
+    .catering-item4 img{
+        width: 292px;
+        height: 557px;
+    }
+    /* ABOUT US */
+    .about-section{
+        padding: 100px 87px;
+    }
+    .about-pics img{
+        width: 302px;
+        height: 460px
+    }
+    .card{
+        width: 349px;
+        height: 362px;
+    }
+    .about-desc h2{
+        font-size: 30px;
+
+    }
+
+    .about-desc p{
+        width: 240px;
+        height: 244px;
+        margin-left: 60px;
+        font-size: 15px;
+    }
+    /* FOOTER */
+    .Footer1{
+        height: 80px;
+    }
+    .social a .messenger{
+        width: 49px;
+        height: 48px;
+    }
+    .social a .facebook{
+        margin-top: 10px;
+        width: 61px;
+        height: 65px;
+    }
+
+    .footer p{
+        margin-top: 10px;
+        text-align: right;
+        font-size: 20px;
+        text-shadow: 3px 3px 3px rgba(0, 0, 0, 0.25);
+    }
+    .Footer2{
+        height: 157px;
+    }
+    .logo2{
+        width: 157px;
+        height: 157px;
+    }
+    .logo2 img{
+        width: 157px;
+        height: 157px;
+    }
+    .title{
+        margin-top: 30px;
+        margin-left: 250px;
+    }
+    .title h1{
+        font-size: 80px;
+    }
+    /* LOG IN */
+  
+
+}
