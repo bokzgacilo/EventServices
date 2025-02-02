@@ -1,7 +1,7 @@
 <?php
-    require_once 'BACK/config_session.php';
-    require_once 'BACK/signup_view.php';
-    require_once 'BACK/login_view.php';
+    require_once 'api/config_session.php';
+    require_once 'api/signup_view.php';
+    require_once 'api/login_view.php';
 ?>
 
 <!DOCTYPE html>
@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="../STYLES/styles.css">
     <link rel="stylesheet" href="../STYLES/responive.css">
     <link rel="stylesheet" href="../STYLES/logIn.css">
-    <link rel="icon" type="image/png" href="../Pictures/logo2.png">
+    <link rel="icon" type="image/png" href="../image/logo2.png">
     <script src="../login.js" defer></script>
     <script src="../sidebar.js"></script>
     <script src="../goback.js"></script>
@@ -32,13 +32,13 @@
     <nav>
 
         <div class="logo">
-            <img src="../Pictures/logo.png" alt="logo">
+            <img src="../image/logo.png" alt="logo">
             <a href="#">QUEEN AND KNIGHT <br>
             EVENT SERVICES</a>
         </div> 
         
         <div class="sidebar">
-            <div><a href=""><img src="../Pictures/close.png" alt="" onclick="closeSidebar()"></a></div>
+            <div><a href=""><img src="../image/close.png" alt="" onclick="closeSidebar()"></a></div>
             <ul class="sidebar-content">
                 <li><a href="#">HOME</a></li>
                 <li><a href="Calendar.html" onclick="saveCurrentPage()">CALENDAR</a></li>
@@ -63,7 +63,7 @@
             <button class="signUp" onclick="showSignup2()"><a>SIGN UP</a></button>
         </div>
         <div class="menubar" >
-            <a href="#" onclick="showSidebar()"><img src="../Pictures/menu.png" alt=""></a>
+            <a href="#" onclick="showSidebar()"><img src="../image/menu.png" alt=""></a>
         </div>
 
     </nav>
@@ -74,7 +74,7 @@
                 <p id="tag">CUSTOMER LOGIN</p>
             </div>
             <div class="back-Button" onclick="closelogin()">
-                <button><a><img src="../Pictures/backButton.png" alt=""></a></button>
+                <button><a><img src="../image/backButton.png" alt=""></a></button>
             </div>
             <form action="BACK/login.php" id="loginForm" method="post">
                 <input type="text" class="username" id="username" name="username" required placeholder="Email">
@@ -109,7 +109,7 @@
                 <p id="tag">ADMIN LOGIN</p>
             </div>
             <div id="ADcloseBtn" class="ADback-Button" onclick="closeADlogin()">
-                <button><a><img src="../Pictures/backButton.png" alt=""></a></button>
+                <button><a><img src="../image/backButton.png" alt=""></a></button>
             </div>
             <form action="BACK/loginAdmin.php" id="loginForm" method="post">
                 <input type="text" class="username" id="ADusername" name="username" required placeholder="Email">
@@ -133,7 +133,7 @@
                 <p id="tag">Sign Up</p>
             </div>
             <div id="SPcloseBtn" class="SPback-Button" onclick="closeSignup()">
-                <button><a><img src="../Pictures/backButton.png" alt=""></a></button>
+                <button><a><img src="../image/backButton.png" alt=""></a></button>
             </div>
             <form action="BACK/signup.php" id="loginForm" method="post">
                 <input type="email" class="username" id="username" name="username"  placeholder="Email">
@@ -160,7 +160,7 @@
                 <p id="tag">Sign Up</p>
             </div>
             <div class="SPback-Button2" onclick="closeSignup2()">
-                <button><a><img src="../Pictures/backButton.png" alt=""></a></button>
+                <button><a><img src="../image/backButton.png" alt=""></a></button>
             </div>
             <form action="BACK/signup.php" id="loginForm" method="post">
                 <input type="email" class="username" id="username" name="username"  placeholder="Email">
@@ -188,23 +188,23 @@
             <button class="reservation-button" onclick="showSignup2()"><a href="#">MAKE A RESERVATION</a></button>
         </div>
         <div class="message">
-            <button><a href="#"><img src="../Pictures/message.png" alt=""></a></button>
+            <button><a href="#"><img src="../image/message.png" alt=""></a></button>
         </div>
         <figure>
             <div class="slide">
-                <img src="../Pictures/LP1.jpg" alt="">
+                <img src="../image/LP1.jpg" alt="">
             </div>
     
             <div class="slide">
-                <img src="../Pictures/LP2.jpg" alt="">
+                <img src="../image/LP2.jpg" alt="">
             </div>
     
             <div class="slide">
-                <img src="../Pictures/LP3.jpg" alt="">
+                <img src="../image/LP3.jpg" alt="">
             </div>
     
             <div id="cancel" class="slide">
-                <img src="../Pictures/LP4.jpg" alt="">
+                <img src="../image/LP4.jpg" alt="">
             </div>
         </figure>.
         
@@ -233,18 +233,18 @@
             <a href="#" class="category-link">WEDDINGS</a>
         </div>
         <div class="events-gallery">
-            <div class="scroll"><img src="../Pictures/down.png" alt=""></div>
+            <div class="scroll"><img src="../image/down.png" alt=""></div>
             <div class="event-item">
-                <img src="../Pictures/Event1.jpg" alt="ERROR 1 EVENTS">
+                <img src="../image/Event1.jpg" alt="ERROR 1 EVENTS">
             </div>
             <div class="event-item">
-                <img src="../Pictures/Event2.jpg" alt="ERROR 2 EVENTS">
+                <img src="../image/Event2.jpg" alt="ERROR 2 EVENTS">
             </div>
             <div class="event-item">
-                <img src="../Pictures/Event3.jpg" alt="ERROR 3 EVENTS">
+                <img src="../image/Event3.jpg" alt="ERROR 3 EVENTS">
             </div>
             <div class="event-item">
-                <img src="../Pictures/Event4.jpg" alt="ERROR 4 EVENTS">
+                <img src="../image/Event4.jpg" alt="ERROR 4 EVENTS">
             </div>
         </div>
     </div>
@@ -255,7 +255,7 @@
         <div class="food-catering">
             <div class="catering-content">
                 <div class="catering-item1">
-                    <img src="../Pictures/Food1.jpg" alt="Catering Image 1">
+                    <img src="../image/Food1.jpg" alt="Catering Image 1">
                 </div>
                 <div class="catering-description">
                     <h3>FOOD CATERING</h3>
@@ -264,18 +264,18 @@
                         At all budget-friendly prices, whether it's a corporate event, wedding, or private party, 
                         we ensure a memorable culinary experience with excellent service.</p>
                     <div class="catering-item2">
-                        <img src="../Pictures/Food2.jpg" alt="Catering Image 2">
+                        <img src="../image/Food2.jpg" alt="Catering Image 2">
                     </div>
                 </div>
                 <div class="catering-item3">
-                    <img src="../Pictures/Food3.jpg" alt="Catering Image 3">
+                    <img src="../image/Food3.jpg" alt="Catering Image 3">
                     <p>We offer customizable menus to suit your preferences and dietary requirements,
                         ensuring every guest is satisfied. Let us handle your catering needs with professionalism and care,
                         so you can enjoy your event without breaking the bank. Choose [your company name] 
                         for exceptional and affordable catering services.</p>
                 </div>
                 <div class="catering-item4">
-                    <img src="../Pictures/Food4.jpg" alt="Catering Image 4">
+                    <img src="../image/Food4.jpg" alt="Catering Image 4">
                 </div>
                 
             </div>
@@ -302,10 +302,10 @@
                     </p>
                 </div>
             </div>
-            <img src="../Pictures/About1.jpg" alt="About1">
-            <img src="../Pictures/About2.jpg" alt="About1">
-            <img src="../Pictures/About3.jpg" alt="About1">
-            <img src="../Pictures/About4.jpg" alt="About1">
+            <img src="../image/About1.jpg" alt="About1">
+            <img src="../image/About2.jpg" alt="About1">
+            <img src="../image/About3.jpg" alt="About1">
+            <img src="../image/About4.jpg" alt="About1">
         </div>
 
     </div>
@@ -313,8 +313,8 @@
     <!-- FOOTER -->
      <div class="Footer1">
         <div class="social">
-            <a href="messenger.com"><img src="../Pictures/messenger.png" alt="messenger" class="messenger"></a>
-            <a href="facebook.com"><img src="../Pictures/facebook.png" alt="facebook" class="facebook"></a>
+            <a href="messenger.com"><img src="../image/messenger.png" alt="messenger" class="messenger"></a>
+            <a href="facebook.com"><img src="../image/facebook.png" alt="facebook" class="facebook"></a>
         </div>
         <div class="footer">
             <p class="page">Page: Queen and Knight
@@ -326,7 +326,7 @@
      </div>
      <div class="Footer2">
         <div class="logo2">
-            <a href="#"><img src="../Pictures/logo.png" alt=""></a>
+            <a href="#"><img src="../image/logo.png" alt=""></a>
         </div>
         <div class="footer-img">
         </div>

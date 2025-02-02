@@ -1,6 +1,6 @@
 async function fetchReservations() {
     try {
-        const response = await fetch('BACK/ReservationData.php'); // Adjusted path
+        const response = await fetch('api/ReservationData.php'); // Adjusted path
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
