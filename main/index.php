@@ -1,293 +1,229 @@
-<?php 
-    include("dbconnect.php");
-
-    // Check if form was submitted
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        // Capture form data
-        $firstName = $_POST['first-name'];
-        $lastName = $_POST['last-name'];
-        $email = $_POST['email'];
-        $phone = $_POST['phone'];
-        $theme = $_POST['theme'];
-        $start = $_POST['start-time'];
-        $end = $_POST['end-time'];
-        $package = $_POST['package'];
+<?php
+require_once 'api/config_session.php';
+require_once 'api/signup_view.php';
+require_once 'api/login_view.php';
+include_once("api/connection.php");
 
 
-
-        // Insert data into database
-        $sql = "INSERT INTO tbl_info (first_name, last_name, email, phone, theme, start_time, end_time, package) 
-                VALUES ('$firstName', '$lastName', '$email', '$phone', '$theme', '$start', '$end', '$package' )";
-
-        if (mysqli_query($con, $sql)) {
-            echo "<script type='text/javascript'>alert('Reservation submitted successfully!');</script>";
-        } else {
-            echo "Error: " . mysqli_error($con);
-        }
-    }
+// $conn->close();
 ?>
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../STYLES/index.css?v=<?php echo time(); ?>">
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display&display=swap" rel="stylesheet">
-    <title>Reservation Form</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>QUEEN AND KNIGHT EVENT SERVICES</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@100..900&display=swap" rel="stylesheet">
+  <!-- <link rel="stylesheet" href="../styles/responive.css"> -->
+  <link rel="icon" type="image/png" href="../images/logo2.png">
+  <?php
+    include("reusables/asset_loader.php");
+  ?>
+  <link rel="stylesheet" href="../styles/styles.css">
+
 </head>
+
+
 <body>
-    <!-- <div class="reservation-form-container">
-        <div class="back-Button">
-            <a href="CustomerPage.html"><img src="../Pictures/backButton.png" alt="backButton"></a>
-        </div>
-        <div class="reservation-form">
-            <h1>Reserve Now!</h1>
-            
-            <div class="separator"></div>
-            <p>here at Queen and Knight event services</p>
+  <div class="container-fluid p-0 m-0">
+    <nav>
+      <div class="logo">
+        <img src="../images/logo3.png">
+        <a href="index.php">QUEEN AND KNIGHT EVENT SERVICES</a>
+      </div>
 
-            <form method="POST" action="index.php">
-                <div class="form-group">
-                    <label for="first-name">First Name:</label>
-                    <input type="text" id="first-name" name="first-name" placeholder="Enter your first name" required>
-                </div>
-                <div class="form-group">
-                    <label for="last-name">Last Name:</label>
-                    <input type="text" id="last-name" name="last-name" placeholder="Enter your last name" required>
-                </div>
-                <div class="form-group">
-                    <label for="email">Email:</label>
-                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
-                </div>
-                <div class="form-group">
-                    <label for="phone">Phone Number:</label>
-                    <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
-                </div>
+      <div class="nav-links">
+        <a href="">Home</a>
+        <a href="#packages">Packages</a>
+        <a href="#services">Services</a>
+        <a href="#about">About</a>
+        <a href="dashboard.php">Dashboard</a>
+      </div>
 
-                <div class="form-group">
-                    <label for="theme">Theme:</label>
-                    <select id="theme" name="theme">
-                        <option value="wedding">Wedding</option>
-                        <option value="birthday">Birthday</option>
-                        <option value="corporate">Debuts</option>
-                    </select>
-                </div>
+      <div class="user-buttons">
+        <a class="login-btn">LOGIN</a>
+        <a class="signup-btn">SIGN UP</a>
+      </div>
+    </nav>
 
-                <div class="form-group">
-                    <label for="start-time">Start Time:</label>
-                    <input type="datetime-local" id="start-time" name="start-time" required>
-
-                    <label for="end-time">End Time:</label>
-                    <input type="datetime-local" id="end-time" name="end-time" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="package">Package:</label>
-                    <select id="package" name="package">
-                        <option value="" disabled selected>Select a package</option>
-                        <option value="small">Small (1-50 pax)</option>
-                        <option value="medium">Medium (50-200 pax)</option>
-                        <option value="large">Large (200-1000 pax)</option>
-                    </select>
-                </div>
-
-
-                <div class="form-group">
-                    <label for="design">Upload Your Preferred Designs:</label>
-                    <input type="file" id="design" name="design">
-                </div>
-                <button type="submit">Submit</button>
-            </form>
-
-
-
-
-
-
-            <div id="popup" class="popup-container">
-                <div class="popup-content">
-                    <img src="../Pictures/logo.png" alt="No Refund Reminder">
-                    <button id="closePopup">Submit</button>
-                </div>
-            </div>
-
-                <-- JAVA SCRIPT-->
-
-            <script>
-                document.querySelector('form').addEventListener('submit', function(event) {
-                    event.preventDefault(); // Prevent form submission for now
-                    document.getElementById('popup').style.display = 'flex'; // Show the pop-up
-                });
-
-                document.getElementById('closePopup').addEventListener('click', function() {
-                    document.getElementById('popup').style.display = 'none'; // Close the pop-up
-                });
-            </script>
-
+    <div class="slider">
+      <div class="message">
+        <button><a href="#"><img src="../images/message.png" alt=""></a></button>
+      </div>
+      <figure>
+        <div class="slide">
+          <img src="../images/LP2.jpg" alt="">
         </div>
 
+        <div class="slide">
+          <img src="../images/LP3.jpg" alt="">
+        </div>
 
-    <div class="reservation-form-container">
-        <form action="index.php" method="post">
-            <div class="details">
-                <h1>RESERVE NOW!</h1>
-                <p>here at Queen and Knight event services</p>
-
-                <div class="form-group">
-                    <label for="first-name">First Name:</label><br>
-                    <input type="text" id="first-name" name="first-name" placeholder="Enter your first name" required>
-                </div>
-
-                <div class="form-group">
-                    <label for="last-name">Last Name:</label><br>
-                    <input type="text" id="last-name" name="last-name" placeholder="Enter your last name" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="email">Email:</label><br>
-                    <input type="email" id="email" name="email" placeholder="Enter your email address" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="phone">Phone Number:</label><br>
-                    <input type="text" id="phone" name="phone" placeholder="Enter your phone number" required>
-                </div><br>
-                
-                <div class="form-group">
-                    <label for="theme">Theme</label><br>
-                    <select id="theme" name="theme">
-                        <option value="wedding">Wedding</option>
-                        <option value="birthday">Birthday</option>
-                        <option value="corporate">Debuts</option>
-                    </select>
-                </div>
-                
-
-                <!-- TIME START AND END TIME-->
-                <div class="form-group">
-                    <label for="start-time">Start Time:</label>
-                    <input type="datetime-local" id="start-time" name="start-time" required>
-
-                    <label for="end-time">End Time:</label>
-                    <input type="datetime-local" id="end-time" name="end-time" required>
-                </div>
-                
+        <div id="cancel" class="slide">
+          <img src="../images/LP4.jpg" alt="">
+        </div>
+      </figure>.
 
 
-
-                
-                <div class="form-group">
-                    <label for="package">Package</label><br>
-                    <select id="package" name="package">
-                        <option value="small_event">package 1</option>
-                        <option value="medium_event">package 2</option>
-                        <option value="medium_event">package 3</option>
-                    </select>
-                </div>
-            </div>
-
-            <div class="designs">
-                
-
-                <div class="prev-events">
-                    <div class="events-slider">
-                        <img src="../Pictures/PrevEvent1.jpg" alt="PrevEvent1.jpg">
-                        <img src="../Pictures/PrevEvent2.jpg" alt="PrevEvent2.jpg">
-                        <img src="../Pictures/PrevEvent3.jpg" alt="PrevEvent3.jpg">
-                        <img src="../Pictures/PrevEvent4.jpg" alt="PrevEvent4.jpg">
-                        <img src="../Pictures/PrevEvent5.jpg" alt="PrevEvent5.jpg">
-                        <img src="../Pictures/PrevEvent6.jpg" alt="PrevEvent6.jpg">
-                    </div>
-                </div>
-                
-            </div>
-            <div class="date">
-                <div class="calendar">
-                    <h2>January</h2>
-                    <table>
-                        <thead>
-                            <tr>
-                                <th>Sun</th>
-                                <th>Mon</th>
-                                <th>Tue</th>
-                                <th>Wed</th>
-                                <th>Thu</th>
-                                <th>Fri</th>
-                                <th>Sat</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>1</td>
-                                <td>2</td>
-                                <td>3</td>
-                                <td>4</td>
-                                <td>5</td>
-                                <td>6</td>
-                                <td>7</td>
-                            </tr>
-                            <tr>
-                                <td>8</td>
-                                <td>9</td>
-                                <td>10</td>
-                                <td>11</td>
-                                <td>12</td>
-                                <td>13</td>
-                                <td>14</td>
-                            </tr>
-                            <tr>
-                                <td>15</td>
-                                <td>16</td>
-                                <td>17</td>
-                                <td>18</td>
-                                <td>19</td>
-                                <td>20</td>
-                                <td>21</td>
-                            </tr>
-                            <tr>
-                                <td>22</td>
-                                <td>23</td>
-                                <td>24</td>
-                                <td>25</td>
-                                <td>26</td>
-                                <td>27</td>
-                                <td>28</td>
-                            </tr>
-                            <tr>
-                                <td>29</td>
-                                <td>30</td>
-                                <td>31</td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                                <td></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <div class= "separator"></div>
-
-            <div class="announcement-container">
-                <h2>Announcements</h2>
-                <ul>
-                    <li>Event booking for the next month is now open!</li>
-                    <li>Special discounts available for early bird reservations.</li>
-                    <li>New themes and designs coming soon. Stay tuned!</li>
-                </ul>
-            </div>
-
-            <div class= "separator"></div>
-
-
-                <div class="button-container">
-                    <input class="button" type="reset" value="Cancel">
-                    <input class="button" type="submit" value="Submit">
-                </div>
-                
-            </div>
-        </form>
+      <div class="centered-text">
+        <h1>Transform Your <span style="color: #6aef55;">Vision</span> into <span style="color: rgba(106, 239, 85, 1);">Reality</span></h1>
+        <p>Book Your <span style="color: rgba(106, 239, 85, 1);">Special</span> Day with Us.</p>
+      </div>
     </div>
+
+    <div class="package-section" id="packages">
+      <h1 class="event-title">PACKAGES OFFERED</h1>
+      <div class="package-list">
+        <!-- API -->
+      </div>
+      <div class="pagination">
+        <!-- API -->
+      </div>
+    </div>
+    
+    <!--    WHAT WE OFFER SECTION TO BUD    -->
+    <div class="offer-section" id="services">
+      <h1 class="event-title">SERVICES OFFERED</h1>
+      <div class="offers">
+        <img src="../images/Food1.jpg" class="offer-big-image">
+        <div class="offer-long">
+          <h2>FOOD CATERING</h2>
+          <p>At Queen and Knight Event Services, we provide affordable and delicious food catering services tailored to your needs.
+            Our diverse menu features fresh, high-quality ingredients prepared by skilled chefs.
+            At all budget-friendly prices, whether it's a corporate event, wedding, or private party,
+            we ensure a memorable culinary experience with excellent service.</p>
+          <img src="../images/Food2.jpg">
+        </div>
+        <div class="offer-long">
+          <img src="../images/Food3.jpg">
+          <p>We offer customizable menus to suit your preferences and dietary requirements,
+            ensuring every guest is satisfied. Let us handle your catering needs with professionalism and care,
+            so you can enjoy your event without breaking the bank. Choose [your company name]
+            for exceptional and affordable catering services.</p>
+        </div>
+        <img src="../images/Food4.jpg" class="offer-big-image">
+      </div>
+    </div>
+    <!--    ABOUT    -->
+    <div class="about-section" id="about">
+      <h1>ABOUT US</h1>
+      <div class="about-pics">
+        <div class="card">
+          <div class="about-desc">
+            <h2>ABOUT US</h2>
+            <p>Welcome to Queen and Knights Event
+              services , your premier partner for
+              planning and reserving exceptional
+              events. Our mission is to make the
+              process of organizing events seamless,
+              efficient, and enjoyable. We specialize
+              in providing a comprehensive reservation
+              platform that caters to a wide range of
+              events, from weddings and corporate
+              gatherings to private parties and
+              community celebrations.
+            </p>
+          </div>
+        </div>
+        <img src="../images/About1.jpg" alt="About1">
+        <img src="../images/About2.jpg" alt="About1">
+        <img src="../images/About3.jpg" alt="About1">
+        <img src="../images/About4.jpg" alt="About1">
+      </div>
+
+    </div>
+
+    <!-- FOOTER -->
+    <div class="Footer1">
+      <div class="social">
+        <a href="messenger.com"><img src="../images/messenger.png" alt="messenger" class="messenger"></a>
+        <a href="facebook.com"><img src="../images/facebook.png" alt="facebook" class="facebook"></a>
+      </div>
+      <div class="footer">
+        <p class="page">Page: Queen and Knight
+          <br> Event Services
+        </p>
+        <p class="telephone">Tel no. : 0000000</p>
+      </div>
+
+    </div>
+    <div class="Footer2">
+      <div class="logo2">
+        <a href="#"><img src="../images/logo.png" alt=""></a>
+      </div>
+      <div class="footer-img">
+      </div>
+      <div class="title">
+        <h1>queen and knights event services</h1>
+      </div>
+    </div>
+  </div>
+  <script>
+    $(document).ready(function(){
+      var storedPage = localStorage.getItem('page');
+
+      if (!storedPage) {
+        storedPage = 1;
+        localStorage.setItem('page', storedPage); // Optionally, set it in localStorage
+      }
+
+      function get_package(page){
+        $.ajax({
+          type: 'get',
+          url: 'api/pagination/get_all_packages.php',
+          data: {
+            page: page
+          },
+          success: response => {
+            $(".package-list").html(response)
+          }
+        })
+      }
+
+      function get_pagination(page){
+        $.ajax({
+          type: 'get',
+          url: 'api/pagination/get_all_pagination.php',
+          data: {
+            page: page
+          },
+          success: response => {
+            $(".pagination").html(response)
+          }
+        })
+      }
+
+      $(document).on('click', '.page-num' ,function(e) {
+        get_package($(this).attr('data-target'))
+        get_pagination($(this).attr('data-target'))
+      });
+
+      $(document).on('click', '#previous-button' ,function() {
+        var currentPage = parseInt(localStorage.getItem('page')) || 1;  // Default to page 1 if not set
+
+        if (currentPage > 1) {
+          var previousPage = currentPage - 1;
+          localStorage.setItem('page', previousPage);  // Store the new page in localStorage
+          get_package(previousPage)
+          get_pagination(previousPage)
+        }
+      });
+
+      $(document).on('click', '#next-button', function() {
+        var currentPage = parseInt(localStorage.getItem('page')) || 1;
+        var nextPage = currentPage + 1;
+        localStorage.setItem('page', nextPage);
+        get_package(nextPage)
+        get_pagination(nextPage)
+      });
+
+      get_package(storedPage)
+      get_pagination(storedPage)
+    })
+  </script>
 </body>
+
 </html>

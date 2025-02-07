@@ -1,0 +1,19 @@
+.fc .fc-button .fc-icon {
+  font-size: 1em;
+}
+
+.fc-daygrid-day-top > a {
+  text-decoration: none;
+  color: #000;
+  cursor: pointer;
+}
+
+thead {
+  background-color: #1d1d1d;
+}
+
+.fc .fc-col-header-cell-cushion {
+  text-decoration: none;
+  color: #fff;
+  padding: 0.5rem;
+}
