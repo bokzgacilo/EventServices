@@ -11,30 +11,35 @@
 </head>
 
 <body class="d-flex flex-row">
-  <div class="d-flex flex-column p-4 text-center">
-    <?php
-    include 'reusables/sidebar.php';
-    ?>
-  </div>
+  <?php
+  include 'reusables/sidebar.php';
+  ?>
   <main>
-    <h2 class="mb-4">Packages</h2>
-    <button class="btn btn-primary btn-success mb-4" data-bs-toggle="modal" data-bs-target="#addPackageModal">Create New Package</button>
-    <table id="example" class="table table-striped table-bordered" width="100%">
-      <thead>
-        <tr>
-          <th>ID</th>
-          <th>Name</th>
-          <th>Pax</th>
-          <th>Price</th>
-          <th>Thumbnail</th>
-          <th>Inclusions</th>
-          <th>Is Active?</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
+    <div class="card">
+      <div class="card-header">
+        <h2 class="panel-title">Packages</h2>
+      </div>
+      <div class="card-body">
+        <button class="btn btn-primary btn-success mb-4" data-bs-toggle="modal" data-bs-target="#addPackageModal">Create New Package</button>
+        <table id="example" class="table table-striped table-bordered" width="100%">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Name</th>
+              <th>Pax</th>
+              <th>Price</th>
+              <th>Thumbnail</th>
+              <th>Inclusions</th>
+              <th>Is Active?</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
   </main>
 
   <div class="modal fade" id="addPackageModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -78,8 +83,8 @@
           url: 'api/create_new_package.php',
           type: 'POST',
           data: formdata,
-          contentType: false, 
-          processData: false, 
+          contentType: false,
+          processData: false,
           success: function(response) {
             console.log(response)
           }
@@ -89,8 +94,8 @@
 
       $('#example').DataTable({
         "ajax": {
-          "url": "api/get_packages.php", 
-          "dataSrc": "" 
+          "url": "api/get_packages.php",
+          "dataSrc": ""
         },
         columns: [{
             data: 'id'
@@ -130,7 +135,4 @@
     });
   </script>
 </body>
-
 </html>
-
-<!-- Name, Pax(int), Price(decimal), Thumbnail (image_url), Inclusions (Long Text) -->

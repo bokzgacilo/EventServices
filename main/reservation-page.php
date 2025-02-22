@@ -1,32 +1,33 @@
 <?php
-$packageid = $_GET['packageid'];
-$package = [];
-$reservedDates = [];
-
-include_once("api/connection.php");
-
-$get_all_reserved_dates = $conn->query("SELECT event_date FROM event_reservations WHERE pid=$packageid");
-if ($get_all_reserved_dates->num_rows > 0) {
-  while ($row = $get_all_reserved_dates->fetch_assoc()) {
-    $reservedDates[] = $row['event_date'];
-  }
-} else {
+  session_start();
+  $packageid = $_GET['packageid'];
+  $package = [];
   $reservedDates = [];
-}
 
-$datesJSON = json_encode($reservedDates);
+  include_once("api/connection.php");
 
-$sql = "SELECT * FROM event_packages WHERE id = $packageid";
-$result = $conn->query($sql);
+  $get_all_reserved_dates = $conn->query("SELECT event_date FROM event_reservations");
+  if ($get_all_reserved_dates->num_rows > 0) {
+    while ($row = $get_all_reserved_dates->fetch_assoc()) {
+      $reservedDates[] = $row['event_date'];
+    }
+  } else {
+    $reservedDates = [];
+  }
 
-if ($result->num_rows > 0) {
-  $package = $result->fetch_assoc();
-} else {
-  header('Location: index.php');
-  exit();
-}
+  $datesJSON = json_encode($reservedDates);
 
-$conn->close();
+  $sql = "SELECT * FROM event_packages WHERE id = $packageid";
+  $result = $conn->query($sql);
+
+  if ($result->num_rows > 0) {
+    $package = $result->fetch_assoc();
+  } else {
+    header('Location: index.php');
+    exit();
+  }
+
+  $conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -36,13 +37,12 @@ $conn->close();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title><?php echo $package['package_name']; ?></title>
-  <script src="../assets/fullcalendar/main.min.js" />
-  </script>
+  <script src="../assets/fullcalendar/main.min.js"></script>
   <link rel="stylesheet" href="../assets/fullcalendar/main.min.css" />
   <link rel="stylesheet" href="../assets/fullcalendar/custom-calendar.css" />
 
   <?php
-  include './reusables/asset_loader.php';
+    include './reusables/asset_loader.php';
   ?>
   <script src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
 
@@ -55,14 +55,15 @@ $conn->close();
       color: white !important;
     }
   </style>
-  <div class="container" style="max-width: 900px;">
-    <div class="d-flex flex-row align-items-center pt-4 pb-4 gap-4">
-      <img class="img img-fluid align-self-center" src="../images/logo3.png" width="50px" height="50px" />
-      <h3 class="fw-bold">Queen and Knights Event Services</h3>
-    </div>
-    <div class="d-flex flex-column">
-      <img src="../<?php echo $package['thumbnail']; ?>" class="img img-fluid" style="width: 100%; height: 600px; object-fit: cover;" />
-      <div class="row">
+  
+  <div class="container-fluid p-0 m-0">
+    <?php
+      include_once("reusables/headbar.php");
+    ?>
+    <div class="d-flex flex-column align-items-center justify-content-center">
+      <div class="d-flex flex-column w-50 ">
+        <img src="../<?php echo $package['thumbnail']; ?>" class="img img-fluid" style="width: 100%; height: 600px; object-fit: cover;" />
+        <div class="row">
         <div class="col-5 d-flex flex-column gap-2 mt-4">
           <h4 class="fw-bold">PACKAGE INFORMATION</h4>
           <div class="row">
@@ -112,6 +113,8 @@ $conn->close();
           <div id="calendar"></div>
         </div>
       </div>
+      </div>
+      
       <div class="d-flex flex-column gap-2 mt-4">
 
         <div class="d-flex flex-row align-items-center mt-4 mb-2">
@@ -121,7 +124,7 @@ $conn->close();
           <div class="card-body">
             <h6 class="card-subtitle mb-2 mt-2 text-muted">Review by: John Doe</h6>
             <div class="mb-2">
-              <span class="badge text-dark">⭐⭐⭐⭐⭐</span>
+              <span class="badge">⭐⭐⭐⭐⭐</span>
             </div>
             <p class="card-text">
               "The event package exceeded our expectations! The venue was amazing, the staff was very professional, and everything was perfectly organized. Highly recommend!"
@@ -187,6 +190,10 @@ $conn->close();
     </div>
   </div>
 
+  <?php
+    include_once("reusables/footbar.php");
+  ?>
+
   <script>
     $(document).ready(function() {
       var reservedDates = <?php echo $datesJSON; ?>;
@@ -199,8 +206,8 @@ $conn->close();
         },
         events: reservedDates.map(function(date) {
           return {
-            start: date, // Set the reserved date as the event start
-            end: date, // Set the end date as the same (one-day event)
+            start: date,
+            end: date,
             display: 'background',
             backgroundColor: "#b83939"
           };
@@ -210,6 +217,9 @@ $conn->close();
 
           if (!reservedDates.includes(clickedDate)) {
             $("input[name='event_date']").val(info.dateStr);
+
+           
+
             $('#eventModal').modal('toggle');
           }
         }

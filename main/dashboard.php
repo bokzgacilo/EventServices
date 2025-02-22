@@ -5,19 +5,18 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../STYLES/DashboardStyle.css">
     <?php
-      include 'reusables/asset_loader.php';
+        include 'reusables/asset_loader.php';
     ?>
     <title>Admin Dashboard</title>
 </head>
-<body>
-    <div class="admin-dashboard">
-      <div class="d-flex flex-column p-4 text-center">
-        <?php
+<body class="d-flex flex-row">
+    <?php
         include 'reusables/sidebar.php';
-        ?>
-      </div>
-
-        <div class="main-content">
+    ?>
+    <main>
+        <h2>Admin Dashboard</h2>
+    </main>
+        <!-- <div class="main-content">
             <div class="bar">
               <h1>Admin Dashboard</h1>
             </div>
@@ -44,8 +43,7 @@
                         <button onclick="location.href='Reports.html'" onclick="saveCurrentPage()">View</button>
                     </div>
                 </div>
-            </div>
-        </div>
+            </div> -->
         
     </div>
 </body>

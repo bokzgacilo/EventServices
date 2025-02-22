@@ -11,30 +11,34 @@
 </head>
 
 <body class="d-flex flex-row">
-  <div class="d-flex flex-column p-4 text-center">
-    <?php
+  <?php
     include 'reusables/sidebar.php';
-    ?>
-  </div>
+  ?>
   <main>
-    <h2 class="mb-4">Incoming Reservations</h2>
-    <table id="example" class="table table-striped table-bordered" width="100%">
-      <thead>
-        <tr>
-          <th>Package ID</th>
-          <th>Price</th>
-          <th>Client's Name</th>
-          <th>Client's Contact</th>
-          <th>Client's Email</th>
-          <th>Event Address</th>
-          <th>Event Date</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-      </thead>
-      <tbody>
-      </tbody>
-    </table>
+    <div class="card">
+      <div class="card-header">
+        <h2 class="panel-title">Incoming Reservations</h2>
+      </div>
+      <div class="card-body">
+        <table id="example" class="table table-striped table-bordered" width="100%">
+          <thead>
+            <tr>
+              <th>Package ID</th>
+              <th>Price</th>
+              <th>Client's Name</th>
+              <th>Client's Contact</th>
+              <th>Client's Email</th>
+              <th>Event Address</th>
+              <th>Event Date</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+          </tbody>
+        </table>
+      </div>
+    </div>
   </main>
   <script>
     $(document).ready(function() {

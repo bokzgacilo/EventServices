@@ -1,11 +1,6 @@
 <?php
-require_once 'api/config_session.php';
-require_once 'api/signup_view.php';
-require_once 'api/login_view.php';
-include_once("api/connection.php");
-
-
-// $conn->close();
+  include_once("api/connection.php");
+  session_start();
 ?>
 
 <!DOCTYPE html>
@@ -13,65 +8,32 @@ include_once("api/connection.php");
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>QUEEN AND KNIGHT EVENT SERVICES</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@100..900&display=swap" rel="stylesheet">
-  <!-- <link rel="stylesheet" href="../styles/responive.css"> -->
-  <link rel="icon" type="image/png" href="../images/logo2.png">
+  <title>QUEEN AND KNIGHT EVENT SERVICES</title>
   <?php
     include("reusables/asset_loader.php");
   ?>
-  <link rel="stylesheet" href="../styles/styles.css">
-
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <style>
+    .slick-next {
+      right: 0;
+    }
+  </style>
 </head>
 
-
 <body>
+
   <div class="container-fluid p-0 m-0">
-    <nav>
-      <div class="logo">
-        <img src="../images/logo3.png">
-        <a href="index.php">QUEEN AND KNIGHT EVENT SERVICES</a>
-      </div>
+    <?php include_once("reusables/headbar.php"); ?>
 
-      <div class="nav-links">
-        <a href="">Home</a>
-        <a href="#packages">Packages</a>
-        <a href="#services">Services</a>
-        <a href="#about">About</a>
-        <a href="dashboard.php">Dashboard</a>
-      </div>
-
-      <div class="user-buttons">
-        <a class="login-btn">LOGIN</a>
-        <a class="signup-btn">SIGN UP</a>
-      </div>
-    </nav>
-
-    <div class="slider">
-      <div class="message">
-        <button><a href="#"><img src="../images/message.png" alt=""></a></button>
-      </div>
-      <figure>
-        <div class="slide">
-          <img src="../images/LP2.jpg" alt="">
-        </div>
-
-        <div class="slide">
-          <img src="../images/LP3.jpg" alt="">
-        </div>
-
-        <div id="cancel" class="slide">
-          <img src="../images/LP4.jpg" alt="">
-        </div>
-      </figure>.
-
-
-      <div class="centered-text">
-        <h1>Transform Your <span style="color: #6aef55;">Vision</span> into <span style="color: rgba(106, 239, 85, 1);">Reality</span></h1>
-        <p>Book Your <span style="color: rgba(106, 239, 85, 1);">Special</span> Day with Us.</p>
-      </div>
+    <div class="slick-carousel">
+      <img src="../images/LP1.jpg" style="height: 900px; object-fit: cover;">
+      <img src="../images/LP2.jpg" style="height: 900px; object-fit: cover;">
+      <img src="../images/LP3.jpg" style="height: 900px; object-fit: cover;">
+      <img src="../images/LP4.jpg" style="height: 900px; object-fit: cover;">
     </div>
 
     <div class="package-section" id="packages">
@@ -83,8 +45,7 @@ include_once("api/connection.php");
         <!-- API -->
       </div>
     </div>
-    
-    <!--    WHAT WE OFFER SECTION TO BUD    -->
+
     <div class="offer-section" id="services">
       <h1 class="event-title">SERVICES OFFERED</h1>
       <div class="offers">
@@ -107,123 +68,97 @@ include_once("api/connection.php");
         <img src="../images/Food4.jpg" class="offer-big-image">
       </div>
     </div>
-    <!--    ABOUT    -->
+
     <div class="about-section" id="about">
-      <h1>ABOUT US</h1>
-      <div class="about-pics">
-        <div class="card">
-          <div class="about-desc">
-            <h2>ABOUT US</h2>
-            <p>Welcome to Queen and Knights Event
-              services , your premier partner for
-              planning and reserving exceptional
-              events. Our mission is to make the
-              process of organizing events seamless,
-              efficient, and enjoyable. We specialize
-              in providing a comprehensive reservation
-              platform that caters to a wide range of
-              events, from weddings and corporate
-              gatherings to private parties and
-              community celebrations.
-            </p>
-          </div>
-        </div>
-        <img src="../images/About1.jpg" alt="About1">
-        <img src="../images/About2.jpg" alt="About1">
-        <img src="../images/About3.jpg" alt="About1">
-        <img src="../images/About4.jpg" alt="About1">
-      </div>
-
+      <h1 class="event-title">ABOUT</h1>
+      <p>Welcome to Queen and Knights Event
+        services , your premier partner for
+        planning and reserving exceptional
+        events. Our mission is to make the
+        process of organizing events seamless,
+        efficient, and enjoyable. We specialize
+        in providing a comprehensive reservation
+        platform that caters to a wide range of
+        events, from weddings and corporate
+        gatherings to private parties and
+        community celebrations.</p>
     </div>
 
-    <!-- FOOTER -->
-    <div class="Footer1">
-      <div class="social">
-        <a href="messenger.com"><img src="../images/messenger.png" alt="messenger" class="messenger"></a>
-        <a href="facebook.com"><img src="../images/facebook.png" alt="facebook" class="facebook"></a>
-      </div>
-      <div class="footer">
-        <p class="page">Page: Queen and Knight
-          <br> Event Services
-        </p>
-        <p class="telephone">Tel no. : 0000000</p>
-      </div>
+    <?php
+      include_once("reusables/footbar.php");
+    ?>
 
-    </div>
-    <div class="Footer2">
-      <div class="logo2">
-        <a href="#"><img src="../images/logo.png" alt=""></a>
-      </div>
-      <div class="footer-img">
-      </div>
-      <div class="title">
-        <h1>queen and knights event services</h1>
-      </div>
-    </div>
-  </div>
-  <script>
-    $(document).ready(function(){
-      var storedPage = localStorage.getItem('page');
-
-      if (!storedPage) {
-        storedPage = 1;
-        localStorage.setItem('page', storedPage); // Optionally, set it in localStorage
-      }
-
-      function get_package(page){
-        $.ajax({
-          type: 'get',
-          url: 'api/pagination/get_all_packages.php',
-          data: {
-            page: page
-          },
-          success: response => {
-            $(".package-list").html(response)
-          }
-        })
-      }
-
-      function get_pagination(page){
-        $.ajax({
-          type: 'get',
-          url: 'api/pagination/get_all_pagination.php',
-          data: {
-            page: page
-          },
-          success: response => {
-            $(".pagination").html(response)
-          }
-        })
-      }
-
-      $(document).on('click', '.page-num' ,function(e) {
-        get_package($(this).attr('data-target'))
-        get_pagination($(this).attr('data-target'))
+    <script>
+      $(document).ready(function(){
+        $('.slick-carousel').slick({
+          autoplay: true,
+          infinite: true,
+          autoplaySpeed: 2000,
+        });
       });
+        
+      $(document).ready(function() {
+        var storedPage = localStorage.getItem('page');
 
-      $(document).on('click', '#previous-button' ,function() {
-        var currentPage = parseInt(localStorage.getItem('page')) || 1;  // Default to page 1 if not set
-
-        if (currentPage > 1) {
-          var previousPage = currentPage - 1;
-          localStorage.setItem('page', previousPage);  // Store the new page in localStorage
-          get_package(previousPage)
-          get_pagination(previousPage)
+        if (!storedPage) {
+          storedPage = 1;
+          localStorage.setItem('page', storedPage); // Optionally, set it in localStorage
         }
-      });
 
-      $(document).on('click', '#next-button', function() {
-        var currentPage = parseInt(localStorage.getItem('page')) || 1;
-        var nextPage = currentPage + 1;
-        localStorage.setItem('page', nextPage);
-        get_package(nextPage)
-        get_pagination(nextPage)
-      });
+        function get_package(page) {
+          $.ajax({
+            type: 'get',
+            url: 'api/pagination/get_all_packages.php',
+            data: {
+              page: page
+            },
+            success: response => {
+              $(".package-list").html(response)
+            }
+          })
+        }
 
-      get_package(storedPage)
-      get_pagination(storedPage)
-    })
-  </script>
+        function get_pagination(page) {
+          $.ajax({
+            type: 'get',
+            url: 'api/pagination/get_all_pagination.php',
+            data: {
+              page: page
+            },
+            success: response => {
+              $(".pagination").html(response)
+            }
+          })
+        }
+
+        $(document).on('click', '.page-num', function(e) {
+          get_package($(this).attr('data-target'))
+          get_pagination($(this).attr('data-target'))
+        });
+
+        $(document).on('click', '#previous-button', function() {
+          var currentPage = parseInt(localStorage.getItem('page')) || 1; // Default to page 1 if not set
+
+          if (currentPage > 1) {
+            var previousPage = currentPage - 1;
+            localStorage.setItem('page', previousPage); // Store the new page in localStorage
+            get_package(previousPage)
+            get_pagination(previousPage)
+          }
+        });
+
+        $(document).on('click', '#next-button', function() {
+          var currentPage = parseInt(localStorage.getItem('page')) || 1;
+          var nextPage = currentPage + 1;
+          localStorage.setItem('page', nextPage);
+          get_package(nextPage)
+          get_pagination(nextPage)
+        });
+
+        get_package(storedPage)
+        get_pagination(storedPage)
+      })
+    </script>
 </body>
 
 </html>

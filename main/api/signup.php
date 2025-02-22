@@ -1,61 +1,42 @@
 <?php
 
-    if($_SERVER["REQUEST_METHOD"] === "POST") {
-        $email = $_POST['username'];
-        $password = $_POST['pass'];
-        $confirm = $_POST['confirm'];
+    header("Content-Type: application/json");
+    session_start();
 
-        try {
-            // include other files
-            require_once 'dbconnectt.php';
-            require_once 'signup_model.php';
-            require_once 'signup_contr.php';
+    include_once("connection.php");
 
-            // avoid errors on sign up
-            $errors = []; // error container;
-            
-            if(is_input_empty($email, $password, $confirm)) {
-                $errors["empty_input"] = "Fill in all fields!"; 
-            }
-            if(is_email_invalid($email)) {
-                $errors["invalid_email"] = "Invalid email used!";
-            }
-            if(is_email_registered($pdo, $email)) {
-                $errors["email_used"] = "Email already registered!";
-            }
-
-            require_once 'config_session.php';
-            
-            if($errors) {
-                $_SESSION["errors_signup"] = $errors;
-                foreach($errors as $error) {
-                    echo "<script type='text/javascript'>alert('$error');</script>";
-                }
-
-                header("Refresh:0.5; url='../HomePage.php'");
-                die();
-            }
-
-            if($password == $confirm) {
-                create_user($pdo, $email, $password);
-                echo "<script type='text/javascript'>alert('Sign Up Successful!');</script>";
-                header("Refresh:0.5; url='../CustomerPage.html?signup=success");
-
-                $pdo = null;
-                $stmt = null;
-
-                die();
-            } else {
-                echo "<script type='text/javascript'>alert('Confirm same password!');</script>";
-                header("Refresh:0.5; url='../HomePage.php'");
-                die();
-            }
-
-        } catch(PDOException $e) {
-            die("Query failed: " . $e->getMessage());
-        }
-
+    $fullname = $_POST['signup_fullname'];
+    $email = $_POST['signup_email'];
+    $password = $_POST['signup_password'];
+    
+    // Check if email already exists
+    $sql = "SELECT * FROM tbl_users WHERE email = ?";
+    $stmt = $conn->prepare($sql);
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
+    
+    if ($result->num_rows > 0) {
+        echo json_encode(["status" => "error", "message" => "Email already exists"]);
     } else {
-        header("Location: ../HomePage.php");
-        die();
+        // Insert new user into the database
+        $insertSql = "INSERT INTO tbl_users (name, email, password) VALUES (?, ?, ?)";
+        $insertStmt = $conn->prepare($insertSql);
+        $insertStmt->bind_param("sss", $fullname, $email, $password);
+    
+        if ($insertStmt->execute()) {
+            $_SESSION['userid'] = $insertStmt->insert_id;
+            $_SESSION['useremail'] = $email;
+            $_SESSION['userfullname'] = $fullname;
+            $_SESSION['usertype'] = "customer";
+            echo json_encode(["status" => "success", "message" => "User registered successfully"]);
+        } else {
+            echo json_encode(["status" => "error", "message" => "Failed to register user"]);
+        }
+    
+        $insertStmt -> close();
     }
+    
+    $stmt->close();
+    $conn->close();
+?>
