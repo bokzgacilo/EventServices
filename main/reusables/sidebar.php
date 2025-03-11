@@ -85,7 +85,7 @@
     <p>User Accounts</p>
     <span><?php echo $users_count; ?></span>
   </a>
-  <a href="reports.html" class="sidebar-links mt-4">
+  <a href="reports.php" class="sidebar-links mt-4">
     <i class="fa-solid fa-file-lines"></i>
     <p>Generate Reports</p>
   </a>

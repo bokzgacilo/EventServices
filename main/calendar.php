@@ -87,9 +87,6 @@
 
       var calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
-        validRange: {
-          start: moment().format('YYYY-MM-DD')
-        },
         events: reservedDates.map(function(date) {
           return {
             start: date,

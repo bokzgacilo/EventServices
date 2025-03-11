@@ -1,33 +1,33 @@
 <?php
-  session_start();
-  $packageid = $_GET['packageid'];
-  $package = [];
+session_start();
+$packageid = $_GET['packageid'];
+$package = [];
+$reservedDates = [];
+
+include_once("api/connection.php");
+
+$get_all_reserved_dates = $conn->query("SELECT event_date FROM event_reservations");
+if ($get_all_reserved_dates->num_rows > 0) {
+  while ($row = $get_all_reserved_dates->fetch_assoc()) {
+    $reservedDates[] = $row['event_date'];
+  }
+} else {
   $reservedDates = [];
+}
 
-  include_once("api/connection.php");
+$datesJSON = json_encode($reservedDates);
 
-  $get_all_reserved_dates = $conn->query("SELECT event_date FROM event_reservations");
-  if ($get_all_reserved_dates->num_rows > 0) {
-    while ($row = $get_all_reserved_dates->fetch_assoc()) {
-      $reservedDates[] = $row['event_date'];
-    }
-  } else {
-    $reservedDates = [];
-  }
+$sql = "SELECT * FROM event_packages WHERE id = $packageid";
+$result = $conn->query($sql);
 
-  $datesJSON = json_encode($reservedDates);
+if ($result->num_rows > 0) {
+  $package = $result->fetch_assoc();
+} else {
+  header('Location: index.php');
+  exit();
+}
 
-  $sql = "SELECT * FROM event_packages WHERE id = $packageid";
-  $result = $conn->query($sql);
-
-  if ($result->num_rows > 0) {
-    $package = $result->fetch_assoc();
-  } else {
-    header('Location: index.php');
-    exit();
-  }
-
-  $conn->close();
+$conn->close();
 ?>
 
 <!DOCTYPE html>
@@ -42,7 +42,7 @@
   <link rel="stylesheet" href="../assets/fullcalendar/custom-calendar.css" />
 
   <?php
-    include './reusables/asset_loader.php';
+  include './reusables/asset_loader.php';
   ?>
   <script src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
 
@@ -55,66 +55,66 @@
       color: white !important;
     }
   </style>
-  
+
   <div class="container-fluid p-0 m-0">
     <?php
-      include_once("reusables/headbar.php");
+    include_once("reusables/headbar.php");
     ?>
     <div class="d-flex flex-column align-items-center justify-content-center">
       <div class="d-flex flex-column w-50 ">
         <img src="../<?php echo $package['thumbnail']; ?>" class="img img-fluid" style="width: 100%; height: 600px; object-fit: cover;" />
         <div class="row">
-        <div class="col-5 d-flex flex-column gap-2 mt-4">
-          <h4 class="fw-bold">PACKAGE INFORMATION</h4>
-          <div class="row">
-            <div class="col-4">
-              <h6 class="fw-semibold">Name</h6>
+          <div class="col-5 d-flex flex-column gap-2 mt-4">
+            <h4 class="fw-bold">PACKAGE INFORMATION</h4>
+            <div class="row">
+              <div class="col-4">
+                <h6 class="fw-semibold">Name</h6>
+              </div>
+              <div class="col">
+                <p><?php echo $package['package_name']; ?></p>
+              </div>
             </div>
-            <div class="col">
-              <p><?php echo $package['package_name']; ?></p>
+            <div class="row">
+              <div class="col-4">
+                <h6 class="fw-semibold">Max Pax</h6>
+              </div>
+              <div class="col">
+                <p><?php echo $package['max_pax']; ?></p>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-4">
-              <h6 class="fw-semibold">Max Pax</h6>
+            <div class="row">
+              <div class="col-4">
+                <h6 class="fw-semibold">Package Price</h6>
+              </div>
+              <div class="col">
+                <p>PHP <?php echo number_format($package['package_price'], 2); ?></p>
+              </div>
             </div>
-            <div class="col">
-              <p><?php echo $package['max_pax']; ?></p>
+            <div class="row">
+              <div class="col-4">
+                <h6 class="fw-semibold">Category</h6>
+              </div>
+              <div class="col">
+                <p>Wedding</p>
+              </div>
             </div>
-          </div>
-          <div class="row">
-            <div class="col-4">
-              <h6 class="fw-semibold">Package Price</h6>
-            </div>
-            <div class="col">
-              <p>PHP <?php echo number_format($package['package_price'], 2); ?></p>
-            </div>
-          </div>
-          <div class="row">
-            <div class="col-4">
-              <h6 class="fw-semibold">Category</h6>
-            </div>
-            <div class="col">
-              <p>Wedding</p>
-            </div>
-          </div>
 
-          <h4 class="fw-bold mt-4">PACKAGE INCLUSIONS</h4>
-          <ul>
-            <?php
-            $inclusions = explode(",", $package['inclusions']);
-            foreach ($inclusions as $inclusion) {
-              echo "<li>$inclusion</li>";
-            }
-            ?>
-          </ul>
-        </div>
-        <div class="col-7 d-flex flex-column mt-4">
-          <div id="calendar"></div>
+            <h4 class="fw-bold mt-4">PACKAGE INCLUSIONS</h4>
+            <ul>
+              <?php
+              $inclusions = explode(",", $package['inclusions']);
+              foreach ($inclusions as $inclusion) {
+                echo "<li>$inclusion</li>";
+              }
+              ?>
+            </ul>
+          </div>
+          <div class="col-7 d-flex flex-column mt-4">
+            <div id="calendar"></div>
+          </div>
         </div>
       </div>
-      </div>
-      
+
       <div class="d-flex flex-column gap-2 mt-4">
 
         <div class="d-flex flex-row align-items-center mt-4 mb-2">
@@ -178,7 +178,10 @@
             <h6 class="fw-semibold mb-2">Client Name</h6>
             <input class="form-control mb-2" type="text" name="client_name" required placeholder="Juan Dela Cruz" />
             <h6 class="fw-semibold mb-2">Client Contact Number</h6>
-            <input class="form-control mb-2" type="text" name="client_contact" required placeholder="+639762210951" />
+            <div class="input-group mb-2">
+              <span class="input-group-text">+63</span>
+              <input class="form-control" type="text" name="client_contact" required placeholder="9762210951" />
+            </div>
             <h6 class="fw-semibold mb-2">Client Email</h6>
             <input class="form-control mb-2" type="email" name="client_email" required placeholder="j.delacruz@gmail.com" />
           </div>
@@ -191,10 +194,20 @@
   </div>
 
   <?php
-    include_once("reusables/footbar.php");
+  include_once("reusables/footbar.php");
   ?>
 
   <script>
+    $(document).ready(function() {
+      $("input[name='client_contact']").on("input", function() {
+        this.value = this.value.replace(/[^0-9]/g, '');
+
+        if (this.value.length > 10) {
+          this.value = this.value.substring(0, 10);
+        }
+      });
+    });
+
     $(document).ready(function() {
       var reservedDates = <?php echo $datesJSON; ?>;
       var calendarEl = document.getElementById('calendar');
@@ -217,8 +230,6 @@
 
           if (!reservedDates.includes(clickedDate)) {
             $("input[name='event_date']").val(info.dateStr);
-
-           
 
             $('#eventModal').modal('toggle');
           }

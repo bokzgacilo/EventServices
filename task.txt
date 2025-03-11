@@ -9,13 +9,15 @@
 ✅ Package Management
 ✅ Reservations Management
 ✅ HYPERLINKS MESSENGER AND FB PAGE - SITE FOOTER
-
-
+✅ CONTACT NUMBER FORMAT
+EVENT GALLERY
 ENABLE GENERATE REPORT
 CUSTOMER SUPPORT - ADMIN / CUSTOMER
-PASSWORD FORMAT - LOGIN/REGISTER
-SMS
+✅ PASSWORD FORMAT - LOGIN/REGISTER
+Mobile Responsiveness
 Calendar add start and end time
+
+SMS
 
 
 admin@gmail.com
