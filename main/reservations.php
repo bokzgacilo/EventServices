@@ -12,7 +12,7 @@
 
 <body class="d-flex flex-row">
   <?php
-    include 'reusables/sidebar.php';
+  include 'reusables/sidebar.php';
   ?>
   <main>
     <div class="card">
@@ -25,9 +25,7 @@
             <tr>
               <th>Package ID</th>
               <th>Price</th>
-              <th>Client's Name</th>
-              <th>Client's Contact</th>
-              <th>Client's Email</th>
+              <th>Client</th>
               <th>Event Address</th>
               <th>Event Date</th>
               <th>Status</th>
@@ -41,6 +39,17 @@
     </div>
   </main>
   <script>
+    // Function to handle status update via Axios
+    function updateEventStatus(eventId, action) {
+      let url = '/update-event-status'; // Replace with your actual API endpoint
+      let data = {
+        id: eventId,
+        status: action
+      };
+
+      console.log(data)
+    }
+
     $(document).ready(function() {
       // Initialize DataTable
       $('#example').DataTable({
@@ -58,31 +67,58 @@
             data: 'client_name'
           },
           {
-            data: 'client_contact'
-          },
-          {
-            data: 'client_email'
-          },
-          {
             data: 'venue'
           },
           {
-            data: 'event_date'
+            data: 'event_date',
+            render: function(data, type, row) {
+              if (!data) return ''; // Handle empty or null values
+
+              const date = new Date(data);
+              return date.toLocaleDateString('en-US', {
+                year: 'numeric',
+                month: 'long',
+                day: 'numeric'
+              });
+            }
           },
           {
-            data: 'event_status'
+            data: 'event_status',
+            render: function(data, type, row) {
+              switch (data) {
+                case 'Confirmed':
+                  return 'Waiting event to process';
+                case 'Pending':
+                  return 'Waiting event to be completed';
+                case 'Completed':
+                  return 'Event Completed';
+                case 'Cancelled':
+                  return 'Event Cancelled';
+                default:
+                  return '';
+              }
+            }
           },
           {
             data: 'id',
             render: function(data, type, row) {
-              return row.status == 0 ? `
-                    <button class='btn btn-primary btn-sm'>Edit</button>
-                    <button class='btn btn-success btn-sm'>Activate</button>
-                  ` : `
-                  <button class='btn btn-primary btn-sm'>Edit</button>
-                  <button class='btn btn-danger btn-sm'>Deactivate</button>`;
+              let buttons = '';
+
+              if (row.event_status === 'Confirmed') {
+                buttons += `<button class='btn btn-primary btn-sm' onclick="updateEventStatus(${data}, 'confirm')">Process Event</button>`;
+              }
+              if (row.event_status === 'Pending') {
+                buttons += `<button class='btn btn-success btn-sm' onclick="updateEventStatus(${data}, 'pending')">Mark as Done</button>`;
+              }
+
+              // Add Cancel button for events that are not already Cancelled or Completed
+              if (row.event_status !== 'Cancelled' && row.event_status !== 'Completed') {
+                buttons += `<button class='ms-2 btn btn-danger btn-sm' onclick="updateEventStatus(${data}, 'cancelled')">Cancel</button>`;
+              }
+
+              return buttons;
             }
-          },
+          }
         ]
       });
     });
