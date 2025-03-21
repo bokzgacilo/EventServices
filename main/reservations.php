@@ -8,6 +8,21 @@
   include 'reusables/asset_loader.php';
   ?>
   <title>Reservations</title>
+  <style>
+    .images-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 10px;
+    }
+
+    .images-container img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      margin: 5px;
+      border-radius: 5px;
+    }
+  </style>
 </head>
 
 <body class="d-flex flex-row">
@@ -15,6 +30,30 @@
   include 'reusables/sidebar.php';
   ?>
   <main>
+    <div class="modal fade" id="ImportEventPicturesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h1 class="modal-title fs-5">Mark as Done</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="importPictures" enctype="multipart/form-data">
+            <div class="modal-body">
+              <input type="hidden" name="eventid" value="" />
+              <p class="fw-semibold">Import Event Pictures</p>
+              <input type="file" name="images[]" id="imagesInput" class="form-control" accept="image/*" multiple>
+              <p class="fw-semibold mt-4">Preview</p>
+              <div id="preview" class="images-container"></div>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-success">Mark as Done</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
     <div class="card">
       <div class="card-header">
         <h2 class="panel-title">Incoming Reservations</h2>
@@ -23,11 +62,12 @@
         <table id="example" class="table table-striped table-bordered" width="100%">
           <thead>
             <tr>
-              <th>Package ID</th>
               <th>Price</th>
               <th>Client</th>
-              <th>Event Address</th>
-              <th>Event Date</th>
+              <th>Address</th>
+              <th>Date</th>
+              <th>Start</th>
+              <th>End</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -39,16 +79,77 @@
     </div>
   </main>
   <script>
+    function OpenImportPicture(eventId) {
+      $("input[name='eventid']").val(eventId)
+      $("#ImportEventPicturesModal").modal("toggle")
+    }
+
     // Function to handle status update via Axios
     function updateEventStatus(eventId, action) {
-      let url = '/update-event-status'; // Replace with your actual API endpoint
       let data = {
-        id: eventId,
-        status: action
+        rid: eventId,
+        action: action
       };
 
-      console.log(data)
+      $.ajax({
+        type: 'post',
+        url: "api/reservations/process_event.php",
+        data: data,
+        success: response => {
+          if (response === "1") {
+            alert("Reservation updated");
+            location.reload();
+          }
+        }
+      })
     }
+
+    $("#importPictures").on("submit", function(e) {
+      e.preventDefault();
+
+      let formData = new FormData(this)
+
+      $.ajax({
+        url: "api/reservations/mark_as_done.php",
+        type: "POST",
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+          let jsonResponse = JSON.parse(response); // Parse JSON response
+          console.log(jsonResponse); // Log the full response
+
+          if (jsonResponse.status === "success") {
+            alert(jsonResponse.message);
+            location.reload();
+          } else {
+            alert("Error: " + jsonResponse.message);
+          }
+        }
+      });
+    })
+    $("#imagesInput").on("change", function() {
+      let preview = $("#preview");
+      preview.empty(); // Clear previous previews
+
+      let files = this.files;
+      if (files.length < 3 || files.length > 5) {
+        alert("Please select between 3 to 5 images.");
+        this.value = ""; // Reset file input
+        return;
+      }
+
+      $.each(files, function(index, file) {
+        let reader = new FileReader();
+        reader.onload = function(e) {
+          $("<img>", {
+            src: e.target.result,
+            class: "img-thumbnail",
+          }).appendTo(preview);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
 
     $(document).ready(function() {
       // Initialize DataTable
@@ -57,9 +158,7 @@
           "url": "api/get_reservations.php", // Your API endpoint to fetch packages
           "dataSrc": "" // Assumes the data from the API is an array of objects
         },
-        columns: [{
-            data: 'pid'
-          },
+        columns: [
           {
             data: 'price'
           },
@@ -79,6 +178,40 @@
                 year: 'numeric',
                 month: 'long',
                 day: 'numeric'
+              });
+            }
+          },
+          {
+            data: 'event_start',
+            render: function(data, type, row) {
+              if (!data) return ''; // Handle empty or null values
+
+              // Ensure `data` is a valid time string
+              const [hours, minutes] = data.split(':'); // Extract hours & minutes
+              const date = new Date();
+              date.setHours(hours, minutes, 0); // Set time while keeping today's date
+
+              return date.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
+              });
+            }
+          },
+          {
+            data: 'event_end',
+            render: function(data, type, row) {
+              if (!data) return ''; // Handle empty or null values
+
+              // Ensure `data` is a valid time string
+              const [hours, minutes] = data.split(':'); // Extract hours & minutes
+              const date = new Date();
+              date.setHours(hours, minutes, 0); // Set time while keeping today's date
+
+              return date.toLocaleTimeString('en-US', {
+                hour: '2-digit',
+                minute: '2-digit',
+                hour12: true
               });
             }
           },
@@ -108,7 +241,7 @@
                 buttons += `<button class='btn btn-primary btn-sm' onclick="updateEventStatus(${data}, 'confirm')">Process Event</button>`;
               }
               if (row.event_status === 'Pending') {
-                buttons += `<button class='btn btn-success btn-sm' onclick="updateEventStatus(${data}, 'pending')">Mark as Done</button>`;
+                buttons += `<button class='btn btn-success btn-sm' onclick="OpenImportPicture(${data})">Mark as Done</button>`;
               }
 
               // Add Cancel button for events that are not already Cancelled or Completed

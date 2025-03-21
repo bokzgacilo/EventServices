@@ -176,7 +176,7 @@ html{
 }
 
 /* PACKAGE SECTIONS TO AH */
-.package-section, .offer-section, .about-section {
+.package-section, .offer-section, .about-section, .event-gallery-section {
   padding: 2rem 4rem;
   display: flex;
   flex-direction: column;

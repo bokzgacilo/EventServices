@@ -135,9 +135,9 @@
       echo "<a class='signup-btn' href='api/logout.php'>Logout</a>";
     } else {
       echo "
-                    <a class='login-btn' data-bs-toggle='modal' data-bs-target='#loginModal'>Login</a>
-                    <a class='signup-btn' data-bs-toggle='modal' data-bs-target='#signupModal'>Sign Up</a>
-                ";
+          <a class='login-btn' data-bs-toggle='modal' data-bs-target='#loginModal'>Login</a>
+          <a class='signup-btn' data-bs-toggle='modal' data-bs-target='#signupModal'>Sign Up</a>
+      ";
     }
     ?>
   </div>
@@ -189,6 +189,16 @@
 </div>
 
 <script>
+  const sessionid = <?php
+                    if (isset($_SESSION['userid'])) {
+                      echo $_SESSION['userid'];
+                    } else {
+                      echo 0;
+                    }
+                    ?>
+
+  console.log(sessionid);
+
   $("input[name='signup_password']").on("input", function() {
     var password = $(this).val();
     var regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_])(?!.*\s).{8,}$/;
@@ -231,11 +241,7 @@
       contentType: false,
       success: response => {
         if (response.status === "success") {
-          alert("logged in")
-
-          localStorage.setItem("userid", response.data.id)
-          localStorage.setItem("useremail", response.data.email)
-          localStorage.setItem("usertype", response.data.type)
+          alert("logged in");
 
           location.reload();
         } else {
@@ -245,3 +251,9 @@
     })
   })
 </script>
+
+<?php
+  if (isset($_SESSION['userid']) && $_SESSION['userid'] !== 1 && $_SESSION['userid'] !== 2) {
+    include "chat_floating.php";
+  }
+?>

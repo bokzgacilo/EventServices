@@ -173,6 +173,12 @@ $conn->close();
             <input type="hidden" name="pid" value="<?php echo $packageid; ?>" />
             <input type="hidden" name="price" value="<?php echo $package['package_price']; ?>" />
             <input class="form-control mb-2" type="date" name="event_date" readonly />
+            <h6 class="fw-semibold mb-2">Event Time</h6>
+            <div class="input-group mb-2">
+                <input class="form-control" type="time" name="start_time" required />
+                <span class="input-group-text">to</span>
+                <input class="form-control" type="time" name="end_time" required />
+            </div>
             <h6 class="fw-semibold mb-2">Event Address</h6>
             <input class="form-control mb-2" type="text" name="event_address" required placeholder="Block 2, Lot 5, Amelia St, Bagumbayan, Bulacan" />
             <h6 class="fw-semibold mb-2">Client Name</h6>

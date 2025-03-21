@@ -10,15 +10,18 @@
 ✅ Reservations Management
 ✅ HYPERLINKS MESSENGER AND FB PAGE - SITE FOOTER
 ✅ CONTACT NUMBER FORMAT
-EVENT GALLERY
-ENABLE GENERATE REPORT
-CUSTOMER SUPPORT - ADMIN / CUSTOMER
+✅ EVENT GALLERY
+✅ CUSTOMER SUPPORT - ADMIN / CUSTOMER
 ✅ PASSWORD FORMAT - LOGIN/REGISTER
+✅ Calendar add start and end time
+
 Mobile Responsiveness
-Calendar add start and end time
-
+ENABLE GENERATE REPORT
 SMS
-
+Custom Package
+Pax,
+inclusions
+food catering (menu, textbox type of food)
 
 admin@gmail.com
 123
