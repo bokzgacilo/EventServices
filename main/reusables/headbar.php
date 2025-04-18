@@ -1,4 +1,22 @@
+
+
 <style>
+  #loadingOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.4);
+    /* Transparent Gray */
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 1056;
+    /* display: none; */
+    /* Initially Hidden */
+  }
+
   nav {
     font-family: "Bebas";
     display: flex;
@@ -9,6 +27,60 @@
     top: 0;
     z-index: 5;
   }
+
+  
+  .user-buttons {
+    margin-left: auto;
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    cursor: pointer;
+  }
+
+  .nav-links {
+    display: flex;
+    flex-direction: row;
+    margin-left: 8rem;
+  }
+
+  /* FOR 700PX BELOW */
+  @media (max-width: 700px) {
+    .logo > a {
+      display: none;
+    }
+
+    nav {
+      padding: 10px; 
+      flex-direction: row;
+      justify-content: space-between;
+    }
+
+    .nav-links {
+      display: none;
+    }
+
+    .nav-links-mobile {
+      display: flex !important;
+      flex-direction: column;
+    }
+    
+    .user-buttons {
+      margin-left: 0;
+      display: flex;
+      flex-direction: row;
+      gap: 1rem;
+      cursor: pointer;
+    }
+
+    .user-buttons>a {
+      padding: 10px 1rem !important;
+      font-size: 18px;
+    }
+  }
+
+  .nav-links-mobile {
+      display: none;
+    }
 
   #password_error {
     display: none;
@@ -28,22 +100,13 @@
     color: #000;
     font-weight: bold;
     font-size: 26px;
-
   }
-
 
   .logo>img {
     width: 60px;
     height: 60px;
     object-fit: cover;
   }
-
-  .nav-links {
-    display: flex;
-    flex-direction: row;
-    margin-left: 8rem;
-  }
-
 
   .nav-links>a {
     text-decoration: none;
@@ -56,18 +119,21 @@
     cursor: pointer;
   }
 
+  .nav-links-mobile>a {
+    text-decoration: none;
+    color: #000;
+    font-size: 24px;
+    font-weight: bold;
+    padding: 1.25rem 0;
+    cursor: pointer;
+    border-bottom: 1px solid black;
+  }
+
   .nav-links>a:hover {
     color: #fff;
     background-color: #000;
   }
 
-  .user-buttons {
-    margin-left: auto;
-    display: flex;
-    flex-direction: row;
-    gap: 1rem;
-    cursor: pointer;
-  }
 
   .user-buttons>a {
     padding: 0.5rem 2rem;
@@ -107,9 +173,13 @@
   }
 </style>
 
+<div id="loadingOverlay">
+  <div class="spinner-border text-light" role="status"></div>
+</div>
+
 <nav>
   <div class="logo">
-    <img src="../images/logo3.png">
+    <img src="../images/logo3.png" data-bs-toggle="offcanvas" data-bs-target="#mobileSidebar">
     <a href="index.php">QUEEN AND KNIGHT EVENT SERVICES</a>
   </div>
 
@@ -128,7 +198,7 @@
       if ($_SESSION['usertype'] === "admin") {
         echo "<a class='login-btn' href='packages.php'>" . $_SESSION['userfullname'] . "</a>";
       } else {
-        echo "<a class='login-btn'>" . $_SESSION['userfullname'] . "</a>";
+        echo "<a class='login-btn' href='my-account.php'>" . $_SESSION['userfullname'] . "</a>";
       }
 
 
@@ -142,6 +212,22 @@
     ?>
   </div>
 </nav>
+
+<div class="offcanvas offcanvas-start" tabindex="-1" id="mobileSidebar">
+  <div class="offcanvas-header">
+    <h5 class="offcanvas-title">Navigation</h5>
+    <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div class="nav-links-mobile">
+      <a href="index.php">Home</a>
+      <a href="index.php#packages">Packages</a>
+      <a href="event_gallery.php">Event Gallery</a>
+      <a href="index.php#services">Services</a>
+      <a href="index.php#about">About</a>
+    </div>
+  </div>
+</div>
 
 <!-- Login Modal -->
 <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
@@ -188,6 +274,33 @@
   </div>
 </div>
 
+<!-- OTP Modal -->
+<div class="modal fade" id="otpModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="otpModalLabel">Enter OTP</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="otpForm">
+          <input type="hidden" name="client_name" id="client_name">
+          <input type="hidden" name="client_id" id="client_id">
+          <input type="hidden" name="client_email" id="client_email">
+          <input type="hidden" name="client_type" id="client_type">
+
+          <div class="mb-3">
+            <label for="otpInput" class="form-label">OTP Code</label>
+            <input type="number" class="form-control" name="otp" id="otpInput" required>
+          </div>
+
+          <button type="submit" class="btn btn-primary">Verify OTP</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
   const sessionid = <?php
                     if (isset($_SESSION['userid'])) {
@@ -197,7 +310,6 @@
                     }
                     ?>
 
-  console.log(sessionid);
 
   $("input[name='signup_password']").on("input", function() {
     var password = $(this).val();
@@ -208,6 +320,28 @@
     } else {
       $("#password_error").hide();
     }
+  });
+
+  $(document).on("submit", "#otpForm", function(e) {
+    e.preventDefault();
+
+    var formdata = new FormData(this);
+
+    $.ajax({
+      type: 'post',
+      url: "api/verify_otp.php",
+      data: formdata,
+      processData: false,
+      contentType: false,
+      success: response => {
+        if (response.status === "success") {
+          alert(response.message);
+          location.reload();
+        } else {
+          alert(response.message);
+        }
+      }
+    });
   });
 
   $(document).on("submit", "#signupform", function(e) {
@@ -233,6 +367,8 @@
 
     var formdata = new FormData(this)
 
+    $('#loadingOverlay').css("display", "flex");
+
     $.ajax({
       type: 'post',
       url: "api/login.php",
@@ -240,13 +376,27 @@
       processData: false,
       contentType: false,
       success: response => {
-        if (response.status === "success") {
-          alert("logged in");
+        console.log(response) 
+
+        if (response.status === "otp_required") {
+          
+          $("#loginModal").modal("toggle");
+          $("#otpModal").modal("toggle");
+        
+          $("#client_name").val(response.data.name);
+          $("#client_id").val(response.data.id);
+          $("#client_email").val(response.data.email);
+          $("#client_type").val(response.data.type);
+        } else if (response.status === "error") {
+          alert(response.message)
+        } else if (response.status === "success") {
+          alert("Logged in successfully!")
 
           location.reload();
-        } else {
-          alert(response.message)
         }
+      },
+      complete: () => {
+        $('#loadingOverlay').css("display", "none");
       }
     })
   })

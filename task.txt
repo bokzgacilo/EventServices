@@ -15,13 +15,26 @@
 ✅ PASSWORD FORMAT - LOGIN/REGISTER
 ✅ Calendar add start and end time
 
-Mobile Responsiveness
+✅ Mobile Responsiveness
 ENABLE GENERATE REPORT
 SMS
-Custom Package
+✅ OTP EVERY LOGIN / Signup
+Email booking confirmation
+IMAGE UPLOAD IN CHAT
+
+✅ Custom Package
 Pax,
 inclusions
 food catering (menu, textbox type of food)
 
 admin@gmail.com
 123
+
+BALANCE
+2000
+
+ADDITIONAL
+1000
+
+Hosting + SMS + Domain
+1800

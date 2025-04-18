@@ -1,6 +1,6 @@
 <?php
-  include_once("api/connection.php");
-  session_start();
+include_once("api/connection.php");
+session_start();
 ?>
 
 <!DOCTYPE html>
@@ -12,10 +12,10 @@
 
   <title>QUEEN AND KNIGHT EVENT SERVICES</title>
   <?php
-    include("reusables/asset_loader.php");
+  include("reusables/asset_loader.php");
   ?>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
   <style>
     .slick-next {
@@ -25,6 +25,77 @@
 </head>
 
 <body>
+  <div class="modal fade" id="quotationModal" tabindex="-1" aria-labelledby="quotationModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="quotationModalLabel">Create Your Own Package</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+          <div class="modal-body d-flex flex-column gap-4">
+        <form id="quotationForm">
+
+            <p class="fw-semibold">Please fill out the form to request a quotation.</p>
+            <div class="form-group">
+              <p class="form-label">Number of Pax</p>
+              <input type="number" class="form-control" name="pax" placeholder="Enter number of guests" required>
+            </div>
+            <div class="form-group">
+              <label for="chairs" class="form-label">Number of Chairs</label>
+              <input type="number" class="form-control" name="chairs" placeholder="Enter number of chairs" required>
+            </div>
+            <div class="form-group">
+              <label for="tables" class="form-label">Number of Tables</label>
+              <input type="number" class="form-control" name="tables" placeholder="Enter number of tables" required>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Catering Service Inclusions</label>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="inclusion[]" id="foodService" value="Food Service">
+                <label class="form-check-label" for="foodService">Food Service</label>
+              </div>
+              <div id="foodDetails" class="mt-2 mb-2" style="display: none;">
+                <label for="allergy" class="form-label">Allergy Details</label>
+                <input type="text" class="form-control" name="allergy" placeholder="Enter allergy details">
+
+                <label for="menu" class="form-label mt-2">Preferred Menu</label>
+                <input type="text" class="form-control" name="menu" placeholder="Enter preferred menu">
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="inclusion[]" value="Waiter and Server">
+                <label class="form-check-label" for="serviceCrew">Service Crew</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="inclusion[]" value="Photo Booth">
+                <label class="form-check-label" for="photoBooth">Photo Booth</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="inclusion[]" value="Photo Coverage">
+                <label class="form-check-label" for="clown">Photo Coverage</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="inclusion[]" value="Video Coverage">
+                <label class="form-check-label" for="clown">Video Coverage</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="inclusion[]" value="Event Host">
+                <label class="form-check-label" for="clown">Event Host/Hostess</label>
+              </div>
+              <div class="form-check">
+                <input class="form-check-input" type="checkbox" name="inclusion[]" value="Lights and Sound System">
+                <label class="form-check-label" for="clown">Lights and Sound System</label>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Request</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
 
   <div class="container-fluid p-0 m-0">
     <?php include_once("reusables/headbar.php"); ?>
@@ -36,8 +107,13 @@
       <img src="../images/LP4.jpg" style="height: 900px; object-fit: cover;">
     </div>
 
+
+
     <div class="package-section" id="packages">
-      <h1 class="event-title">PACKAGES OFFERED</h1>
+      <div class="d-flex flex-row align-items-center justify-content-between">
+        <h1 class="event-title">PACKAGES OFFERED</h1>
+        <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#quotationModal">Custom Package</button>
+      </div>
       <div class="package-list">
         <!-- API -->
       </div>
@@ -85,18 +161,49 @@
     </div>
 
     <?php
-      include_once("reusables/footbar.php");
+    include_once("reusables/footbar.php");
     ?>
 
     <script>
-      $(document).ready(function(){
+      $(document).ready(function() {
         $('.slick-carousel').slick({
           autoplay: true,
           infinite: true,
           autoplaySpeed: 2000,
         });
       });
-        
+
+      $("#quotationForm").on("submit", function(e){
+        e.preventDefault();
+
+        $.ajax({
+          type: "POST",
+          url: "api/createCustomPackage.php",
+          data: $(this).serialize(),
+          success: function(response) {
+            if (response == 1) {
+              alert("Quotation request sent successfully!");
+              $("#quotationModal").modal("hide");
+            } else {
+              alert("Failed to send quotation request. Please try again.");
+            }
+          },
+          error: function() {
+            alert("An error occurred. Please try again.");
+          }
+        });
+      })
+
+      $(document).ready(function() {
+        $('#foodService').change(function() {
+          if ($(this).is(':checked')) {
+            $('#foodDetails').slideDown();
+          } else {
+            $('#foodDetails').slideUp();
+          }
+        });
+      });
+
       $(document).ready(function() {
         var storedPage = localStorage.getItem('page');
 

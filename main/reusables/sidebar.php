@@ -4,10 +4,12 @@
   $package_count = 0;
   $reservation_count = 0;
   $users_count = 0;
+  $custom_count = 0;
 
   $sql = "SELECT 
     (SELECT COUNT(*) FROM tbl_users WHERE type='customer') AS users_count, 
     (SELECT COUNT(*) FROM event_packages) AS package_count, 
+    (SELECT COUNT(*) FROM custom_packages_request) AS custom_count, 
     (SELECT COUNT(*) FROM event_reservations) AS reservation_count";
 
   $result = $conn->query($sql);
@@ -16,6 +18,7 @@
     $row = $result->fetch_assoc();
     $users_count = $row['users_count'];
     $package_count = $row['package_count'];
+    $custom_count = $row['custom_count'];
     $reservation_count = $row['reservation_count'];
   } else {
     $users_count = 0;
@@ -74,7 +77,11 @@
     <i class="fa-solid fa-list"></i>
     <p>Reservations</p>
     <span><?php echo $reservation_count; ?></span>
-
+  </a>
+  <a href="custom_reservations.php" class="sidebar-links mt-4">
+    <i class="fa-solid fa-list"></i>
+    <p>Custom Package Reservations</p>
+    <span><?php echo $custom_count; ?></span>
   </a>
   <a href="calendar.php" class="sidebar-links mt-4">
     <i class="fa-regular fa-calendar-days"></i>

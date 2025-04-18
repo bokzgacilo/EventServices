@@ -54,17 +54,35 @@ $conn->close();
       background-color: red !important;
       color: white !important;
     }
+
+    .hero-img {
+        width: 100%; height: 600px; object-fit: cover;
+      }
+
+    .main-container  {
+      max-width: 800px;
+    }
+
+    @media (max-width: 700px) {
+      .hero-img {
+       height: 200px;
+      }
+
+      .main-container  {
+        max-width: 100%;
+      }
+    }
   </style>
 
-  <div class="container-fluid p-0 m-0">
+  <div class="container-fluid p-0 mb-4">
     <?php
     include_once("reusables/headbar.php");
     ?>
     <div class="d-flex flex-column align-items-center justify-content-center">
-      <div class="d-flex flex-column w-50 ">
-        <img src="../<?php echo $package['thumbnail']; ?>" class="img img-fluid" style="width: 100%; height: 600px; object-fit: cover;" />
-        <div class="row">
-          <div class="col-5 d-flex flex-column gap-2 mt-4">
+      <div class="main-container d-flex flex-column">
+        <img src="../<?php echo $package['thumbnail']; ?>" class="img img-fluid hero-img" />
+        <div class="row p-4 p-lg-0">
+          <div class="col-lg-5 col-12 d-flex flex-column gap-2 mt-lg-4 mt-2">
             <h4 class="fw-bold">PACKAGE INFORMATION</h4>
             <div class="row">
               <div class="col-4">
@@ -109,14 +127,12 @@ $conn->close();
               ?>
             </ul>
           </div>
-          <div class="col-7 d-flex flex-column mt-4">
+          <div class="col-lg-7 col-12 d-flex flex-column mt-4">
             <div id="calendar"></div>
           </div>
         </div>
-      </div>
 
-      <div class="d-flex flex-column gap-2 mt-4">
-
+        <div class="d-flex flex-column gap-2 mt-4">
         <div class="d-flex flex-row align-items-center mt-4 mb-2">
           <h4 class="fw-bold">COMMENTS AND REVIEWS (3)</h4>
         </div>
@@ -157,6 +173,7 @@ $conn->close();
           </div>
         </div>
       </div>
+      </div>
     </div>
   </div>
 
@@ -181,15 +198,11 @@ $conn->close();
             </div>
             <h6 class="fw-semibold mb-2">Event Address</h6>
             <input class="form-control mb-2" type="text" name="event_address" required placeholder="Block 2, Lot 5, Amelia St, Bagumbayan, Bulacan" />
-            <h6 class="fw-semibold mb-2">Client Name</h6>
-            <input class="form-control mb-2" type="text" name="client_name" required placeholder="Juan Dela Cruz" />
             <h6 class="fw-semibold mb-2">Client Contact Number</h6>
             <div class="input-group mb-2">
               <span class="input-group-text">+63</span>
               <input class="form-control" type="text" name="client_contact" required placeholder="9762210951" />
             </div>
-            <h6 class="fw-semibold mb-2">Client Email</h6>
-            <input class="form-control mb-2" type="email" name="client_email" required placeholder="j.delacruz@gmail.com" />
           </div>
           <div class="modal-footer">
             <button type="submit" class="btn btn-success">Confirm Reservation</button>

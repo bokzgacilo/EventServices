@@ -92,7 +92,17 @@ if ($get_all_users) {
       // Append new message
       document.querySelector(".chat-body").innerHTML += `
         <div class="chat-message ${messageClass}">
-          <p>${data.message}</p></div>
+          <p>${data.message}</p>
+        </div>
+
+         ${data.images && data.images.length > 0 ? 
+          `<div class="chat-image-preview">
+            ${data.images.map(base64Image => 
+              `<img src="${base64Image}" />`
+            ).join('')}
+          </div>` 
+          : ''
+        }
       `;
       document.querySelector(".chat-body").scrollTop = document.querySelector(".chat-body").scrollHeight;
     });
@@ -105,6 +115,23 @@ if ($get_all_users) {
       padding: 0.75rem 1.5rem;
       border-radius: 20px;
       font-size: 1rem;
+    }
+
+    .chat-image-preview {
+      width: 100%;
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Dynamic columns */
+      justify-items: center; /* Center items horizontally */
+      align-items: center; /* Center items vertically */
+      gap: 1rem; /* Space between grid items (images) */
+    }
+
+
+    .chat-image-preview > img {
+      width: 100%;
+      height: 150px;
+      object-fit: cover;
+      border-radius: 5px;
     }
 
     /* Client (left-aligned) */
