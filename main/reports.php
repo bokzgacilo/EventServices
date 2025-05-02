@@ -29,7 +29,8 @@
                 <select id="what_to_export" class="col-4 form-control">
                   <option value="packages">All Packages</option>
                   <option value="reservations">All Reservations</option>
-                  <option value="user_accounts">All User Accounts</option>
+                  <option value="custom_packages">All Custom Packages</option>
+                  <option value="users">All User Accounts</option>
                 </select>
                 </div>
                 <div class="col-2">
@@ -53,7 +54,8 @@
             target: what_to_export
           },
           success: response => {
-            console.log(response)
+            var json =JSON.parse(response)
+            location.href= "../main/api/generate_reports" + json.url;
           }
         })
       })

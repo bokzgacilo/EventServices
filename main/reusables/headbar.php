@@ -267,7 +267,33 @@
           <p>Set Password</p>
           <input class="form-control" name="signup_password" type="text" required />
           <p class="mb-4 mt-2" id="password_error">Password must contain at least 1 uppercase letter, 1 number, 1 special character, and no spaces.</p>
-          <button class="btn btn-primary mt-4" type="submit">Signup</button>
+          <button class="btn btn-primary mt-4" id="signup-button" type="submit">Signup</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- OTP SIGNUP Modal -->
+<div class="modal fade" id="otpSignupModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="otpModalLabel">Enter OTP</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="otpSignupForm">
+          <input type="hidden" name="hidden_signup_name">
+          <input type="hidden" name="hidden_signup_email">
+          <input type="hidden" name="hidden_signup_password">
+
+          <div class="mb-3">
+            <label for="otpInput" class="form-label">OTP Code</label>
+            <input type="number" class="form-control" name="otp" id="otpInput" required>
+          </div>
+
+          <button type="submit" class="btn btn-success">Complete Signup</button>
         </form>
       </div>
     </div>
@@ -344,6 +370,24 @@
     });
   });
 
+  $(document).on("submit", "#otpSignupForm", function(e) {
+    e.preventDefault();
+
+    var formdata = new FormData(this)
+
+    $.ajax({
+      type: 'post',
+      url: "api/signup.php?step=2",
+      data: formdata,
+      processData: false,
+      contentType: false,
+      success: response => {
+        alert(response.message)
+        location.reload();
+      }
+    })
+  })
+
   $(document).on("submit", "#signupform", function(e) {
     e.preventDefault();
 
@@ -351,14 +395,29 @@
 
     $.ajax({
       type: 'post',
-      url: "api/signup.php",
+      url: "api/signup.php?step=1",
       data: formdata,
       processData: false,
       contentType: false,
+      beforeSend: () => {
+        $("#signup-button").attr("disabled", true)
+        $("#signup-button").text("Checking... (Don't close or reload page)");
+      },
       success: response => {
-        alert(response.message)
+        console.log(response)
+        if(response.status === "success"){
+          $("input[name='hidden_signup_name']").val(response.data.signup_fullname)
+          $("input[name='hidden_signup_email']").val(response.data.signup_email)
+          $("input[name='hidden_signup_password']").val(response.data.signup_password)
 
-        location.reload();
+          $("#signupModal").modal("toggle");
+          $("#otpSignupModal").modal("toggle");
+        }else {
+          alert(response.message)
+        }
+
+        $("#signup-button").attr("disabled", false)
+        $("#signup-button").text("Signup");
       }
     })
   })
@@ -376,10 +435,7 @@
       processData: false,
       contentType: false,
       success: response => {
-        console.log(response) 
-
         if (response.status === "otp_required") {
-          
           $("#loginModal").modal("toggle");
           $("#otpModal").modal("toggle");
         

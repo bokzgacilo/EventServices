@@ -2,63 +2,67 @@
 include("../connection.php");
 require '../../../vendor/autoload.php'; // Make sure to install PhpSpreadsheet
 
-$target = $_POST['target'];
-
-// Set the folder to store the file
-$folderPath = "exports/";
-if (!file_exists($folderPath)) {
-  mkdir($folderPath, 0777, true); // Create folder if it doesn't exist
-}
-
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
-use PhpOffice\PhpSpreadsheet\Cell\Coordinate;
 
-// Generate a unique filename
-$filename = "$target-" . time() . ".xlsx";
-$filePath = $folderPath . $filename;
+function exportToExcel($conn, $sql, $filenamePrefix = 'export')
+{
+  $result = $conn->query($sql);
 
-$query = "SELECT * FROM tbl_users WHERE type='customer'";
-$result = mysqli_query($conn, $query);
+  if (!$result || $result->num_rows == 0) {
+    return json_encode(["status" => "error", "message" => "No data found."]);
+  }
 
-if (!$result) {
-  die('Query Failed: ' . mysqli_error($conn));
-}
+  $spreadsheet = new Spreadsheet();
+  $sheet = $spreadsheet->getActiveSheet();
 
-$spreadsheet = new Spreadsheet();
-$sheet = $spreadsheet->getActiveSheet();
+  $columns = array_keys($result->fetch_assoc());
+  $result->data_seek(0); // reset pointer
 
-// Fetch column names
-$columns = [];
-while ($field = mysqli_fetch_field($result)) {
-    $columns[] = $field->name;
-}
-
-// Add column headers
-$colIndex = 1;
-foreach ($columns as $column) {
-    $columnLetter = Coordinate::stringFromColumnIndex($colIndex);
-    $sheet->setCellValue($columnLetter . '1', $column); // Column letter + row number
-    $colIndex++;
-}
-
-// Add data rows
-$rowIndex = 2;
-while ($row = mysqli_fetch_assoc($result)) {
-    $colIndex = 1;
-    foreach ($columns as $column) {
-        $columnLetter = Coordinate::stringFromColumnIndex($colIndex);
-        $sheet->setCellValue($columnLetter . $rowIndex, $row[$column]); // Column letter + row number
-        $colIndex++;
+  // Write headers to first row
+  foreach ($columns as $colIndex => $colName) {
+    $cell = chr(65 + $colIndex) . '1'; // A, B, C, ...
+    $sheet->setCellValue($cell, $colName);
+  }
+  $rowIndex = 2;
+  while ($row = $result->fetch_assoc()) {
+    foreach ($columns as $colIndex => $colName) {
+      $cell = chr(65 + $colIndex) . $rowIndex;
+      $sheet->setCellValue($cell, $row[$colName]);
     }
     $rowIndex++;
+  }
+  // Save to file
+  $filename = $filenamePrefix . '_' . time() . '.xlsx';
+  $exportPath = __DIR__ . '/exports/' . $filename;
+  $publicUrl = '/exports/' . $filename; // adjust depending on your URL structure
+
+  $writer = new Xlsx($spreadsheet);
+  $writer->save($exportPath);
+
+  return json_encode(["status" => "success", "url" => $publicUrl]);
 }
 
-// Write the file and send it as a download
-$writer = new Xlsx($spreadsheet);
-$writer->save("php://output");
+$target = $_POST['target'];
 
-// Return the URL of the generated file
-$fileUrl = "http://localhost/eventservices/main/" . $filePath; // Change this to your actual domain
+$sql = "";
 
-// echo json_encode(["success" => true, "file_url" => $fileUrl]);
+switch ($_POST['target']) {
+  case 'packages':
+    $sql = "SELECT * FROM event_packages";
+    break;
+  case 'reservations':
+    $sql = "SELECT * FROM event_reservations";
+    break;
+  case 'custom_packages':
+    $sql = "SELECT * FROM custom_packages_request";
+    break;
+  case 'users':
+    $sql = "SELECT * FROM tbl_users";
+    break;
+  default:
+    echo json_encode(["status" => "type-error", "message" => "Type of Export Error", "description" => "Unable to generate selected type."]);
+    exit();
+}
+
+echo exportToExcel($conn, $sql, $_POST['target']);
