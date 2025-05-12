@@ -86,6 +86,8 @@ $reqId = isset($_GET['req']) ? htmlspecialchars($_GET['req']) : '';
           <th>Event Name</th>
           <th>Event Date</th>
           <th>Price</th>
+          <th>Payment Status</th>
+          <th>Status</th>
           <th>Date Requested</th>
         </tr>
       </thead>
@@ -100,6 +102,8 @@ $reqId = isset($_GET['req']) ? htmlspecialchars($_GET['req']) : '';
             <td><?php echo htmlspecialchars($reservation['package_name'] ?? 'Custom Package'); ?></td>
             <td><?php echo htmlspecialchars(date("F j, Y g:iA", strtotime($reservation['event_date']))); ?></td>
             <td><?php echo htmlspecialchars("PHP " . $reservation['price'] ?? 'PHP 0'); ?></td>
+            <td><?php echo htmlspecialchars($reservation['payment_status']); ?></td>
+            <td><?php echo htmlspecialchars($reservation['event_status']); ?></td>
             <td><?php echo htmlspecialchars(date("F j, Y g:iA", strtotime($reservation['created_at']))); ?></td>
           </tr>
         <?php endforeach; ?>

@@ -44,24 +44,41 @@ function exportToExcel($conn, $sql, $filenamePrefix = 'export')
 }
 
 $target = $_POST['target'];
+$range = $_POST['range'];
+
+$days = match($range) {
+  'weekly' => 7,
+  'monthly' => 30,
+  'yearly' => 365,
+  default => 0,
+};
+
+$filter = "";
+if ($days > 0) {
+  $filter = " WHERE created_at >= NOW() - INTERVAL $days DAY";
+}
 
 $sql = "";
 
-switch ($_POST['target']) {
+switch ($target) {
   case 'packages':
-    $sql = "SELECT * FROM event_packages";
+    $sql = "SELECT * FROM event_packages" . $filter;
     break;
   case 'reservations':
-    $sql = "SELECT * FROM event_reservations";
+    $sql = "SELECT * FROM event_reservations" . $filter;
     break;
   case 'custom_packages':
-    $sql = "SELECT * FROM custom_packages_request";
+    $sql = "SELECT * FROM custom_packages_request" . $filter;
     break;
   case 'users':
-    $sql = "SELECT * FROM tbl_users";
+    $sql = "SELECT * FROM tbl_users" . $filter;
     break;
   default:
-    echo json_encode(["status" => "type-error", "message" => "Type of Export Error", "description" => "Unable to generate selected type."]);
+    echo json_encode([
+      "status" => "type-error",
+      "message" => "Type of Export Error",
+      "description" => "Unable to generate selected type."
+    ]);
     exit();
 }
 

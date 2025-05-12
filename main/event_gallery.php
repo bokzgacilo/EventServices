@@ -2,7 +2,20 @@
 session_start();
 include_once("api/connection.php");
 
-$sql = "SELECT id, event_date, client_name, venue FROM event_reservations WHERE event_status = 'Completed'";
+$sql = "SELECT 
+  er.id, 
+  er.event_date, 
+  er.client_name, 
+  er.venue, 
+  ep.type 
+FROM 
+  event_reservations er
+JOIN 
+  event_packages ep ON er.pid = ep.id
+WHERE 
+  er.event_status = 'Completed';
+";
+
 $result = $conn->query($sql);
 
 $reservations = [];
@@ -28,17 +41,51 @@ if ($result->num_rows > 0) {
   <?php
   include './reusables/asset_loader.php';
   ?>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css"/>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
+  <link rel="stylesheet" type="text/css"
+    href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/moment/min/moment.min.js"></script>
 </head>
 
 <body>
+  <style>
+    .feedback {
+      display: flex;
+      flex-direction: column;
+    }
+  </style>
   <div class="container-fluid p-0 m-0">
     <?php
     include_once("reusables/headbar.php");
     ?>
+
+    <div class="modal fade" id="eventDetailsModal" aria-labelledby="eventDetailsModalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Event Details</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <div class="modal-body">
+            <div class="d-flex flex-column" id="event-detail-container">
+
+            </div>
+            <form id="feedbackForm" class="d-flex flex-row gap-2 justify-content-between align-items-start">
+              <input type="hidden" name="event_id_feedback" />
+              <textarea class="form-control form-control-sm auto-resize" name="feedback" rows="1"
+                placeholder="Write a comment..." required></textarea>
+              <button type="submit" class="btn btn-primary btn-sm">Comment</button>
+            </form>
+
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
 
     <div class="event-gallery-section">
       <h1 class="event-title">EVENT GALLERY</h1>
@@ -52,23 +99,27 @@ if ($result->num_rows > 0) {
                   <?php
                   $imageDir = "../images/event_gallery/" . $reservation['id'];
                   $images = glob($imageDir . "/*.{jpg,png,gif,jpeg}", GLOB_BRACE); // Get all image files
-
+                
                   if (!empty($images)):
                     foreach ($images as $image):
-                  ?>
-                      <img src="<?= htmlspecialchars($image) ?>" class="img-fluid" style="width: 100%; height: 500px; object-fit: cover;" alt="Event Image">
-                    <?php
+                      ?>
+                      <img src="<?= htmlspecialchars($image) ?>" class="img-fluid"
+                        style="width: 100%; height: 500px; object-fit: cover;" alt="Event Image">
+                      <?php
                     endforeach;
                   else:
                     ?>
-                    <img src="images/default.jpg" class="img-fluid" style="width: 100%; height: 500px; object-fit: cover;" alt="Default Image"> <!-- Fallback image -->
+                    <img src="images/default.jpg" class="img-fluid" style="width: 100%; height: 500px; object-fit: cover;"
+                      alt="Default Image"> <!-- Fallback image -->
                   <?php endif; ?>
                 </div>
 
-                <div class="d-flex flex-column p-4">
-                  <h5 class="card-title"><?= htmlspecialchars($reservation['client_name']) ?></h5>
-                  <p class="card-text"><strong>Date:</strong> <?= htmlspecialchars($reservation['event_date']) ?></p>
-                  <p class="card-text"><strong>Venue:</strong> <?= htmlspecialchars($reservation['venue']) ?></p>
+                <div class="d-flex flex-row justify-content-between p-4">
+                  <a href="javascript:void(0);" class="open-modal" data-id="<?= $reservation['id'] ?>">
+                    <?= htmlspecialchars($reservation['client_name']) ?>'s <?= htmlspecialchars($reservation['type']) ?>
+                    Event
+                  </a>
+                  <p><strong></strong> <?= htmlspecialchars(date('F j, Y', strtotime($reservation['event_date']))) ?></p>
                 </div>
 
               </div>
@@ -89,6 +140,50 @@ if ($result->num_rows > 0) {
       arrows: true,
       dots: true,
     });
+
+    $('#feedbackForm').on('submit', function (e) {
+      e.preventDefault();
+
+      var formdata = new FormData(this);
+
+      $.ajax({
+        url: 'api/make_feedback.php',
+        type: 'POST',
+        processData: false, 
+        contentType: false,
+        data: formdata,
+        success: function (response) {
+          if (response.status === 'success') {
+            Swal.fire('Success', response.message, 'success');
+
+            $('#feedbackForm')[0].reset(); // clear textarea
+            $("#eventDetailsModal").modal("hide")
+          } else {
+            Swal.fire('Error', response.message, 'error');
+          }
+        },
+        error: function () {
+          Swal.fire('Error', 'Something went wrong with the request.', 'error');
+        }
+      });
+    });
+
+
+    $(".open-modal").on("click", function () {
+      var event_id = $(this).attr("data-id");
+      $.ajax({
+        type: 'get',
+        url: "api/get_event_details.php",
+        data: {
+          id: event_id
+        },
+        success: response => {
+          $("input[name='event_id_feedback']").val(event_id)
+          $("#eventDetailsModal").modal("show")
+          $("#event-detail-container").html(response)
+        }
+      })
+    })
   </script>
 </body>
 

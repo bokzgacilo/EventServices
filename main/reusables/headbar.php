@@ -1,5 +1,3 @@
-
-
 <style>
   #loadingOverlay {
     position: fixed;
@@ -28,7 +26,7 @@
     z-index: 5;
   }
 
-  
+
   .user-buttons {
     margin-left: auto;
     display: flex;
@@ -45,12 +43,12 @@
 
   /* FOR 700PX BELOW */
   @media (max-width: 700px) {
-    .logo > a {
+    .logo>a {
       display: none;
     }
 
     nav {
-      padding: 10px; 
+      padding: 10px;
       flex-direction: row;
       justify-content: space-between;
     }
@@ -63,7 +61,7 @@
       display: flex !important;
       flex-direction: column;
     }
-    
+
     .user-buttons {
       margin-left: 0;
       display: flex;
@@ -79,8 +77,8 @@
   }
 
   .nav-links-mobile {
-      display: none;
-    }
+    display: none;
+  }
 
   #password_error {
     display: none;
@@ -264,10 +262,18 @@
           <input class="form-control mb-4" name="signup_fullname" type="text" required />
           <p>Email</p>
           <input class="form-control mb-4" name="signup_email" type="email" required />
-          <p>Set Password</p>
-          <input class="form-control" name="signup_password" type="text" required />
-          <p class="mb-4 mt-2" id="password_error">Password must contain at least 1 uppercase letter, 1 number, 1 special character, and no spaces.</p>
-          <button class="btn btn-primary mt-4" id="signup-button" type="submit">Signup</button>
+          <p>Password</p>
+          <input class="form-control mb-4" name="signup_password" type="password" required />
+          <p>Confirm Password</p>
+          <input class="form-control mb-4" name="signup_confirm_password" type="password" required />
+          <p class="mb-4 mt-2" id="password_error"></p>
+          <div class="form-check">
+            <input class="form-check-input" type="checkbox" value="" id="termsCheck">
+            <label class="form-check-label" for="termsCheck">
+              I agree to the <a href="#">terms and conditions</a>
+            </label>
+          </div>
+          <button class="btn btn-primary mt-4" id="signup-button" type="submit" disabled>Signup</button>
         </form>
       </div>
     </div>
@@ -329,26 +335,35 @@
 
 <script>
   const sessionid = <?php
-                    if (isset($_SESSION['userid'])) {
-                      echo $_SESSION['userid'];
-                    } else {
-                      echo 0;
-                    }
-                    ?>
+  if (isset($_SESSION['userid'])) {
+    echo $_SESSION['userid'];
+  } else {
+    echo 0;
+  }
+  ?>
+
+  $('#termsCheck').on('change', function () {
+    if ($(this).is(':checked')) {
+      $('#signup-button').removeAttr('disabled');
+    } else {
+      $('#signup-button').attr('disabled', 'disabled');
+    }
+  });
 
 
-  $("input[name='signup_password']").on("input", function() {
+  $("input[name='signup_password']").on("input", function () {
     var password = $(this).val();
     var regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_])(?!.*\s).{8,}$/;
 
     if (!regex.test(password)) {
       $("#password_error").show();
+      $("#password_error").text("Password must contain at least 1 uppercase letter, 1 number, 1 special character, and no spaces.");
     } else {
       $("#password_error").hide();
     }
   });
 
-  $(document).on("submit", "#otpForm", function(e) {
+  $(document).on("submit", "#otpForm", function (e) {
     e.preventDefault();
 
     var formdata = new FormData(this);
@@ -370,7 +385,7 @@
     });
   });
 
-  $(document).on("submit", "#otpSignupForm", function(e) {
+  $(document).on("submit", "#otpSignupForm", function (e) {
     e.preventDefault();
 
     var formdata = new FormData(this)
@@ -388,8 +403,24 @@
     })
   })
 
-  $(document).on("submit", "#signupform", function(e) {
+  $(document).on("submit", "#signupform", function (e) {
     e.preventDefault();
+
+    var password = $("input[name='signup_password']").val();
+    var confirm_password = $("input[name='signup_confirm_password']").val();
+
+    if (password !== confirm_password) {
+      $("#password_error").show();
+      $("#password_error").text("Password not matched");
+      console.log("password not matched")
+
+      return;
+    } else {
+      $("#password_error").hide();
+    }
+
+    console.log("Proceed signup")
+
 
     var formdata = new FormData(this)
 
@@ -405,14 +436,14 @@
       },
       success: response => {
         console.log(response)
-        if(response.status === "success"){
+        if (response.status === "success") {
           $("input[name='hidden_signup_name']").val(response.data.signup_fullname)
           $("input[name='hidden_signup_email']").val(response.data.signup_email)
           $("input[name='hidden_signup_password']").val(response.data.signup_password)
 
           $("#signupModal").modal("toggle");
           $("#otpSignupModal").modal("toggle");
-        }else {
+        } else {
           alert(response.message)
         }
 
@@ -421,7 +452,8 @@
       }
     })
   })
-  $(document).on("submit", "#loginform", function(e) {
+
+  $(document).on("submit", "#loginform", function (e) {
     e.preventDefault();
 
     var formdata = new FormData(this)
@@ -438,7 +470,7 @@
         if (response.status === "otp_required") {
           $("#loginModal").modal("toggle");
           $("#otpModal").modal("toggle");
-        
+
           $("#client_name").val(response.data.name);
           $("#client_id").val(response.data.id);
           $("#client_email").val(response.data.email);
@@ -446,9 +478,9 @@
         } else if (response.status === "error") {
           alert(response.message)
         } else if (response.status === "success") {
-          alert("Logged in successfully!")
-
-          location.reload();
+          alert("Logged in successfully!");
+          location.href = response.redirect;
+          // location.reload();
         }
       },
       complete: () => {
@@ -459,7 +491,7 @@
 </script>
 
 <?php
-  if (isset($_SESSION['userid']) && $_SESSION['userid'] !== 1 && $_SESSION['userid'] !== 2) {
-    include "chat_floating.php";
-  }
+if (isset($_SESSION['userid']) && $_SESSION['userid'] !== 1 && $_SESSION['userid'] !== 2) {
+  include "chat_floating.php";
+}
 ?>

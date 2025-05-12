@@ -5,6 +5,7 @@ $name = mysqli_real_escape_string($conn, $_POST['name']);
 $pax = intval($_POST['pax']);
 $price = floatval($_POST['price']);
 $inclusions = mysqli_real_escape_string($conn, $_POST['inclusions']);
+$category = $_POST['category'];
 
 // Handle image upload
   if (isset($_FILES["thumbnail"])) {
@@ -23,7 +24,7 @@ $inclusions = mysqli_real_escape_string($conn, $_POST['inclusions']);
 
     if (move_uploaded_file($_FILES["thumbnail"]["tmp_name"], "../../" . $new_image_path)) {
       // Prepare and execute the insert query
-      $sql = "INSERT INTO event_packages (package_name, max_pax, package_price, thumbnail, inclusions) VALUES ('$name', $pax, $price, '$new_image_path', '$inclusions')";
+      $sql = "INSERT INTO event_packages (package_name, max_pax, package_price, thumbnail, inclusions, type) VALUES ('$name', $pax, $price, '$new_image_path', '$inclusions', '$category')";
 
       if ($conn->query($sql) === TRUE) {
         echo "New package added successfully!";

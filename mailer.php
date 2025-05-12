@@ -2,7 +2,7 @@
   use PHPMailer\PHPMailer\PHPMailer;
   use PHPMailer\PHPMailer\Exception;
   
-  require '../../vendor/autoload.php';
+  require 'vendor/autoload.php';
 
   function sendOtpToEmail($email, $name, $otp) {
     $mail = new PHPMailer(true);

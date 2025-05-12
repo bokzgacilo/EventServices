@@ -8,7 +8,7 @@
     bottom: 30px;
     right: 30px;
     z-index: 500;
-    background-color: #4ba2ff;
+    /* background-color: #4ba2ff; */
     border-radius: 50%;
     height: 50px;
     width: 50px;
@@ -60,7 +60,7 @@
     gap: 1rem;
   }
 
-  .chat-form  > input {
+  .chat-form>input {
     flex: 1;
   }
 
@@ -111,18 +111,40 @@
   .chat-image-preview {
     width: 100%;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Dynamic columns */
-    justify-items: center; /* Center items horizontally */
-    align-items: center; /* Center items vertically */
-    gap: 1rem; /* Space between grid items (images) */
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    /* Dynamic columns */
+    justify-items: center;
+    /* Center items horizontally */
+    align-items: center;
+    /* Center items vertically */
+    gap: 1rem;
+    /* Space between grid items (images) */
   }
 
 
-  .chat-image-preview > img {
+  .chat-image-preview>img {
     width: 100%;
     height: 150px;
     object-fit: cover;
     border-radius: 5px;
+  }
+
+  .fab-icon {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    padding: 10px;
+    object-fit: cover;
+    transition: 0.2s;
+    cursor: pointer;
+  }
+
+  .fab-icon:hover {
+    background-color:rgb(29, 29, 29);
+  }
+
+  .fab-container.fab-opened .fab-icon {
+    display: none;
   }
 </style>
 
@@ -132,39 +154,39 @@ $selected_user = $_SESSION['userid'];
 <script>
   function compressImageToBase64(file, quality = 0.7, maxWidth = 800) {
     return new Promise((resolve, reject) => {
-    const reader = new FileReader();
+      const reader = new FileReader();
 
-    reader.onload = function (event) {
-      const img = new Image();
-      img.onload = function () {
-        const canvas = document.createElement('canvas');
-        let width = img.width;
-        let height = img.height;
+      reader.onload = function (event) {
+        const img = new Image();
+        img.onload = function () {
+          const canvas = document.createElement('canvas');
+          let width = img.width;
+          let height = img.height;
 
-        if (width > maxWidth) {
-          height *= maxWidth / width;
-          width = maxWidth;
-        }
+          if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+          }
 
-        canvas.width = width;
-        canvas.height = height;
+          canvas.width = width;
+          canvas.height = height;
 
-        const ctx = canvas.getContext('2d');
-        ctx.drawImage(img, 0, 0, width, height);
+          const ctx = canvas.getContext('2d');
+          ctx.drawImage(img, 0, 0, width, height);
 
-        // Get compressed Base64 string
-        const base64 = canvas.toDataURL('image/jpeg', quality);
-        resolve(base64);
+          // Get compressed Base64 string
+          const base64 = canvas.toDataURL('image/jpeg', quality);
+          resolve(base64);
+        };
+
+        img.onerror = reject;
+        img.src = event.target.result;
       };
 
-      img.onerror = reject;
-      img.src = event.target.result;
-    };
-
-    reader.onerror = reject;
-    reader.readAsDataURL(file);
-  });
-}
+      reader.onerror = reject;
+      reader.readAsDataURL(file);
+    });
+  }
 
 
 
@@ -269,12 +291,12 @@ $selected_user = $_SESSION['userid'];
         <p>${data.message}</p>
       </div>
 
-       ${data.images && data.images.length > 0 ? 
+       ${data.images && data.images.length > 0 ?
         `<div class="chat-image-preview">
-          ${data.images.map(base64Image => 
-            `<img src="${base64Image}" />`
-          ).join('')}
-        </div>` 
+          ${data.images.map(base64Image =>
+          `<img src="${base64Image}" />`
+        ).join('')}
+        </div>`
         : ''
       }
     `;
@@ -283,6 +305,7 @@ $selected_user = $_SESSION['userid'];
 </script>
 
 <div class="fab-container">
+  <img class="fab-icon" src="../images/icons/chat.png" />
   <div class="fab-content">
     <div class="fab-content-header">
       <p>Chat With Admin</p>
@@ -294,7 +317,7 @@ $selected_user = $_SESSION['userid'];
 
       </div>
       <div class="chat-form">
-       <input type="file" id="image-input" accept="image/*" multiple style="display: none;">
+        <input type="file" id="image-input" accept="image/*" multiple style="display: none;">
         <button class="btn btn-primary" id="upload-picture">Upload</button>
         <input type="text" class="form-control message-field" placeholder="Message...">
         <button class="btn btn-primary" id="send-button">Send</button>
@@ -304,14 +327,13 @@ $selected_user = $_SESSION['userid'];
 </div>
 
 <script>
-  $(".fab-container").on("click", function() {
+  $(".fab-container").on("click", function () {
     $(this).addClass("fab-opened");
     $(".fab-content").addClass("show"); // Toggle visibility class
   });
 
-  $(document).on("click", "#minimize_button", function() {
+  $(document).on("click", "#minimize_button", function () {
     $(".fab-container").removeClass("fab-opened");
     $(".fab-content").removeClass("show");
   });
 </script>
-

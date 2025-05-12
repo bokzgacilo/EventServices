@@ -10,6 +10,7 @@
     (SELECT COUNT(*) FROM tbl_users WHERE type='customer') AS users_count, 
     (SELECT COUNT(*) FROM event_packages) AS package_count, 
     (SELECT COUNT(*) FROM custom_packages_request) AS custom_count, 
+    (SELECT COUNT(*) FROM payments) AS payment_count, 
     (SELECT COUNT(*) FROM event_reservations) AS reservation_count";
 
   $result = $conn->query($sql);
@@ -19,6 +20,7 @@
     $users_count = $row['users_count'];
     $package_count = $row['package_count'];
     $custom_count = $row['custom_count'];
+    $payment_count = $row['payment_count'];
     $reservation_count = $row['reservation_count'];
   } else {
     $users_count = 0;
@@ -83,6 +85,11 @@
     <p>Custom Package Reservations</p>
     <span><?php echo $custom_count; ?></span>
   </a>
+  <a href="transaction.php" class="sidebar-links mt-4">
+    <i class="fa-solid fa-list"></i>
+    <p>Transactions</p>
+    <span><?php echo $payment_count; ?></span>
+  </a>
   <a href="calendar.php" class="sidebar-links mt-4">
     <i class="fa-regular fa-calendar-days"></i>
     <p>Calendar</p>
@@ -93,7 +100,7 @@
     <span><?php echo $users_count; ?></span>
   </a>
   <a href="chats.php" class="sidebar-links mt-4">
-    <i class="fa-solid fa-mail"></i>
+    <i class="fa-solid fa-comment"></i>
     <p>Chats</p>
   </a>
   <a href="reports.php" class="sidebar-links mt-4">

@@ -15,7 +15,8 @@ session_start();
   include("reusables/asset_loader.php");
   ?>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css" />
-  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
+  <link rel="stylesheet" type="text/css"
+    href="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick-theme.css" />
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
   <style>
     .slick-next {
@@ -32,8 +33,8 @@ session_start();
           <h5 class="modal-title" id="quotationModalLabel">Create Your Own Package</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-          <div class="modal-body d-flex flex-column gap-4">
-        <form id="quotationForm">
+        <div class="modal-body d-flex flex-column gap-4">
+          <form id="quotationForm">
 
             <p class="fw-semibold">Please fill out the form to request a quotation.</p>
             <div class="form-group">
@@ -51,7 +52,8 @@ session_start();
             <div class="form-group">
               <label class="form-label">Catering Service Inclusions</label>
               <div class="form-check">
-                <input class="form-check-input" type="checkbox" name="inclusion[]" id="foodService" value="Food Service">
+                <input class="form-check-input" type="checkbox" name="inclusion[]" id="foodService"
+                  value="Food Service">
                 <label class="form-check-label" for="foodService">Food Service</label>
               </div>
               <div id="foodDetails" class="mt-2 mb-2" style="display: none;">
@@ -86,11 +88,11 @@ session_start();
                 <label class="form-check-label" for="clown">Lights and Sound System</label>
               </div>
             </div>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Request</button>
-          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-primary">Request</button>
+        </div>
         </form>
 
       </div>
@@ -110,9 +112,19 @@ session_start();
 
 
     <div class="package-section" id="packages">
-      <div class="d-flex flex-row align-items-center justify-content-between">
+      <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
         <h1 class="event-title">PACKAGES OFFERED</h1>
-        <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#quotationModal">Custom Package</button>
+        <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#quotationModal">Custom
+          Package</button>
+      </div>
+      <div class="col-lg-2 col-12">
+        <select class="form-select" id="select-category">
+          <option>Birthday</option>
+          <option>Wedding</option>
+          <option>Funeral</option>
+          <option>Party</option>
+          <option>Other</option>
+        </select>
       </div>
       <div class="package-list">
         <!-- API -->
@@ -128,7 +140,8 @@ session_start();
         <img src="../images/Food1.jpg" class="offer-big-image">
         <div class="offer-long">
           <h2>FOOD CATERING</h2>
-          <p>At Queen and Knight Event Services, we provide affordable and delicious food catering services tailored to your needs.
+          <p>At Queen and Knight Event Services, we provide affordable and delicious food catering services tailored to
+            your needs.
             Our diverse menu features fresh, high-quality ingredients prepared by skilled chefs.
             At all budget-friendly prices, whether it's a corporate event, wedding, or private party,
             we ensure a memorable culinary experience with excellent service.</p>
@@ -165,7 +178,10 @@ session_start();
     ?>
 
     <script>
-      $(document).ready(function() {
+      
+
+
+      $(document).ready(function () {
         $('.slick-carousel').slick({
           autoplay: true,
           infinite: true,
@@ -173,14 +189,14 @@ session_start();
         });
       });
 
-      $("#quotationForm").on("submit", function(e){
+      $("#quotationForm").on("submit", function (e) {
         e.preventDefault();
 
         $.ajax({
           type: "POST",
           url: "api/createCustomPackage.php",
           data: $(this).serialize(),
-          success: function(response) {
+          success: function (response) {
             if (response == 1) {
               alert("Quotation request sent successfully!");
               $("#quotationModal").modal("hide");
@@ -188,14 +204,14 @@ session_start();
               alert("Failed to send quotation request. Please try again.");
             }
           },
-          error: function() {
+          error: function () {
             alert("An error occurred. Please try again.");
           }
         });
       })
 
-      $(document).ready(function() {
-        $('#foodService').change(function() {
+      $(document).ready(function () {
+        $('#foodService').change(function () {
           if ($(this).is(':checked')) {
             $('#foodDetails').slideDown();
           } else {
@@ -204,12 +220,48 @@ session_start();
         });
       });
 
-      $(document).ready(function() {
+      $(document).ready(function () {
         var storedPage = localStorage.getItem('page');
+
+        $("#select-category").on("change", function () {
+          const selectedValue = $(this).val();
+
+          get_category(storedPage, selectedValue)
+          get_category_pagination(storedPage, selectedValue)
+        });
 
         if (!storedPage) {
           storedPage = 1;
           localStorage.setItem('page', storedPage); // Optionally, set it in localStorage
+        }
+
+        function get_category(page, category){
+            $.ajax({
+              type: "get",
+              url: "api/pagination/get_all_category_items.php",
+              data: {
+                category: category,
+                page: page
+              },
+              success: response => {
+                $(".package-list").html(response)
+                localStorage.setItem('category', category);
+              }
+            })
+        }
+
+        function get_category_pagination(page, category) {
+          $.ajax({
+            type: 'get',
+            url: 'api/pagination/get_all_category_pagination.php',
+            data: {
+              category: category,
+              page: page
+            },
+            success: response => {
+              $(".pagination").html(response)
+            }
+          })
         }
 
         function get_package(page) {
@@ -238,12 +290,12 @@ session_start();
           })
         }
 
-        $(document).on('click', '.page-num', function(e) {
+        $(document).on('click', '.page-num', function (e) {
           get_package($(this).attr('data-target'))
           get_pagination($(this).attr('data-target'))
         });
 
-        $(document).on('click', '#previous-button', function() {
+        $(document).on('click', '#previous-button', function () {
           var currentPage = parseInt(localStorage.getItem('page')) || 1; // Default to page 1 if not set
 
           if (currentPage > 1) {
@@ -254,7 +306,7 @@ session_start();
           }
         });
 
-        $(document).on('click', '#next-button', function() {
+        $(document).on('click', '#next-button', function () {
           var currentPage = parseInt(localStorage.getItem('page')) || 1;
           var nextPage = currentPage + 1;
           localStorage.setItem('page', nextPage);

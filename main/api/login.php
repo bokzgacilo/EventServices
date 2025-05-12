@@ -28,7 +28,7 @@ if ($result->num_rows > 0) {
     $_SESSION['usertype'] = $row['type'];
     $_SESSION['userfullname'] = $row['name'];
 
-    echo json_encode(["status" => "success", "data" => $row]);
+    echo json_encode(["status" => "success", "data" => $row, "redirect" => "packages.php"]);
   }
 } else {
   echo json_encode(["status" => "error", "message" => "Invalid credentials"]);

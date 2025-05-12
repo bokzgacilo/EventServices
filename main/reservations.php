@@ -30,7 +30,8 @@
   include 'reusables/sidebar.php';
   ?>
   <main>
-    <div class="modal fade" id="ImportEventPicturesModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="ImportEventPicturesModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+      aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -68,6 +69,7 @@
               <th>Date</th>
               <th>Start</th>
               <th>End</th>
+              <th>Payment Status</th>
               <th>Status</th>
               <th>Action</th>
             </tr>
@@ -84,27 +86,61 @@
       $("#ImportEventPicturesModal").modal("toggle")
     }
 
-    // Function to handle status update via Axios
     function updateEventStatus(eventId, action) {
-      let data = {
-        rid: eventId,
-        action: action
-      };
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "Do you want to proceed with this request?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, proceed',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          // Show loading modal
+          Swal.fire({
+            title: 'Processing...',
+            text: 'Please wait while we process your request.',
+            allowOutsideClick: false,
+            didOpen: () => {
+              Swal.showLoading();
 
-      $.ajax({
-        type: 'post',
-        url: "api/reservations/process_event.php",
-        data: data,
-        success: response => {
-          if (response === "1") {
-            alert("Reservation updated");
-            location.reload();
-          }
+              // Send AJAX after loading starts
+              let data = {
+                rid: eventId,
+                action: action
+              };
+
+              $.ajax({
+                type: 'post',
+                url: "api/reservations/process_event.php",
+                data: data,
+                success: response => {
+                  Swal.fire(
+                    response.title || 'Success!',
+                    response.description || 'The request has been processed.',
+                    'success'
+                  );
+
+                  $('#example').DataTable().ajax.reload();
+                },
+                error: () => {
+                  Swal.fire(
+                    'Error!',
+                    'Something went wrong while processing the request.',
+                    'error'
+                  );
+                }
+              });
+            }
+          });
         }
-      })
+      });
     }
 
-    $("#importPictures").on("submit", function(e) {
+
+    $("#importPictures").on("submit", function (e) {
       e.preventDefault();
 
       let formData = new FormData(this)
@@ -115,7 +151,7 @@
         data: formData,
         contentType: false,
         processData: false,
-        success: function(response) {
+        success: function (response) {
           let jsonResponse = JSON.parse(response); // Parse JSON response
           console.log(jsonResponse); // Log the full response
 
@@ -128,7 +164,7 @@
         }
       });
     })
-    $("#imagesInput").on("change", function() {
+    $("#imagesInput").on("change", function () {
       let preview = $("#preview");
       preview.empty(); // Clear previous previews
 
@@ -139,9 +175,9 @@
         return;
       }
 
-      $.each(files, function(index, file) {
+      $.each(files, function (index, file) {
         let reader = new FileReader();
-        reader.onload = function(e) {
+        reader.onload = function (e) {
           $("<img>", {
             src: e.target.result,
             class: "img-thumbnail",
@@ -151,7 +187,7 @@
       });
     });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
       // Initialize DataTable
       $('#example').DataTable({
         "ajax": {
@@ -170,7 +206,7 @@
           },
           {
             data: 'event_date',
-            render: function(data, type, row) {
+            render: function (data, type, row) {
               if (!data) return ''; // Handle empty or null values
 
               const date = new Date(data);
@@ -183,10 +219,9 @@
           },
           {
             data: 'event_start',
-            render: function(data, type, row) {
+            render: function (data, type, row) {
               if (!data) return ''; // Handle empty or null values
 
-              // Ensure `data` is a valid time string
               const [hours, minutes] = data.split(':'); // Extract hours & minutes
               const date = new Date();
               date.setHours(hours, minutes, 0); // Set time while keeping today's date
@@ -200,7 +235,7 @@
           },
           {
             data: 'event_end',
-            render: function(data, type, row) {
+            render: function (data, type, row) {
               if (!data) return ''; // Handle empty or null values
 
               // Ensure `data` is a valid time string
@@ -217,12 +252,14 @@
           },
           {
             data: 'event_status',
-            render: function(data, type, row) {
+            render: function (data, type, row) {
               switch (data) {
                 case 'Confirmed':
-                  return 'Waiting event to process';
+                  return row.payment_status === 'Unpaid'
+                    ? 'Waiting for payment'
+                    : 'Waiting event to process';
                 case 'Pending':
-                  return 'Waiting event to be completed';
+                  return 'Waiting for confirmation';
                 case 'Completed':
                   return 'Event Completed';
                 case 'Cancelled':
@@ -233,15 +270,20 @@
             }
           },
           {
+            data: 'payment_status'
+          },
+          {
             data: 'id',
-            render: function(data, type, row) {
+            render: function (data, type, row) {
               let buttons = '';
 
               if (row.event_status === 'Confirmed') {
-                buttons += `<button class='btn btn-primary btn-sm' onclick="updateEventStatus(${data}, 'confirm')">Process Event</button>`;
+                const isDisabled = row.payment_status === 'Unpaid' ? 'disabled' : '';
+                buttons += `<button class='btn btn-primary btn-sm' onclick="OpenImportPicture(${data})" ${isDisabled}>Process</button>`;
               }
+
               if (row.event_status === 'Pending') {
-                buttons += `<button class='btn btn-success btn-sm' onclick="OpenImportPicture(${data})">Mark as Done</button>`;
+                buttons += `<button class='btn btn-primary btn-sm' onclick="updateEventStatus(${data}, 'confirmed')">Confirm</button>`;
               }
 
               // Add Cancel button for events that are not already Cancelled or Completed
