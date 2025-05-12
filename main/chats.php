@@ -67,7 +67,11 @@ if ($get_all_users) {
       let userType = "admin";
 
       if (message === "") {
-        alert("Message cannot be empty!");
+        Swal.fire({
+          icon: 'warning',
+          title: 'Oops...',
+          text: 'Message cannot be empty!',
+        });
         return;
       }
 

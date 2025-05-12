@@ -376,8 +376,13 @@
       contentType: false,
       success: response => {
         if (response.status === "success") {
-          alert(response.message);
+         Swal.fire({
+          icon: 'success',
+          title: 'Success',
+          text: response.message,
+        }).then(() => {
           location.reload();
+        });
         } else {
           alert(response.message);
         }
@@ -390,17 +395,23 @@
 
     var formdata = new FormData(this)
 
-    $.ajax({
-      type: 'post',
-      url: "api/signup.php?step=2",
-      data: formdata,
-      processData: false,
-      contentType: false,
-      success: response => {
-        alert(response.message)
+   $.ajax({
+    type: 'post',
+    url: "api/signup.php?step=2",
+    data: formdata,
+    processData: false,
+    contentType: false,
+    success: response => {
+      Swal.fire({
+        icon: 'success',
+        title: 'Success',
+        text: response.message,
+      }).then(() => {
         location.reload();
-      }
-    })
+      });
+    }
+  });
+
   })
 
   $(document).on("submit", "#signupform", function (e) {
@@ -476,11 +487,15 @@
           $("#client_email").val(response.data.email);
           $("#client_type").val(response.data.type);
         } else if (response.status === "error") {
-          alert(response.message)
+          console.log(response)
         } else if (response.status === "success") {
-          alert("Logged in successfully!");
-          location.href = response.redirect;
-          // location.reload();
+          Swal.fire({
+            icon: 'success',
+            title: 'Logged In',
+            text: 'Logged in successfully!',
+          }).then(() => {
+            location.href = response.redirect;
+          });
         }
       },
       complete: () => {

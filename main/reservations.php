@@ -156,8 +156,14 @@
           console.log(jsonResponse); // Log the full response
 
           if (jsonResponse.status === "success") {
-            alert(jsonResponse.message);
-            location.reload();
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: jsonResponse.message,
+            }).then(() => {
+              location.reload();
+            });
+
           } else {
             alert("Error: " + jsonResponse.message);
           }
@@ -170,10 +176,15 @@
 
       let files = this.files;
       if (files.length < 3 || files.length > 5) {
-        alert("Please select between 3 to 5 images.");
+        Swal.fire({
+          icon: 'warning',
+          title: 'Invalid Selection',
+          text: 'Please select between 3 to 5 images.',
+        });
         this.value = ""; // Reset file input
         return;
       }
+
 
       $.each(files, function (index, file) {
         let reader = new FileReader();

@@ -1,6 +1,7 @@
 <?php
 include("../connection.php");
 require '../../../vendor/autoload.php'; // Make sure to install PhpSpreadsheet
+header('Content-Type: application/json');
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
@@ -25,13 +26,18 @@ function exportToExcel($conn, $sql, $filenamePrefix = 'export')
     $sheet->setCellValue($cell, $colName);
   }
   $rowIndex = 2;
+  $tableData = []; // Array to store table data
   while ($row = $result->fetch_assoc()) {
+    $tableRow = [];
     foreach ($columns as $colIndex => $colName) {
       $cell = chr(65 + $colIndex) . $rowIndex;
       $sheet->setCellValue($cell, $row[$colName]);
+      $tableRow[$colName] = $row[$colName];
     }
+    $tableData[] = $tableRow; // Add the row to the table data array
     $rowIndex++;
   }
+  
   // Save to file
   $filename = $filenamePrefix . '_' . time() . '.xlsx';
   $exportPath = __DIR__ . '/exports/' . $filename;
@@ -40,7 +46,12 @@ function exportToExcel($conn, $sql, $filenamePrefix = 'export')
   $writer = new Xlsx($spreadsheet);
   $writer->save($exportPath);
 
-  return json_encode(["status" => "success", "url" => $publicUrl]);
+  // Return both table data and the export URL
+  return json_encode([
+    "status" => "success",
+    "url" => $publicUrl,
+    "tableData" => $tableData
+  ]);
 }
 
 $target = $_POST['target'];

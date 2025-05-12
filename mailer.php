@@ -14,7 +14,7 @@
         $mail->SMTPAuth = true;
         $mail->Username = 'support@queenandknighteventservices.site';
         $mail->Password = '2/fF9>|Jk';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // 'ssl' also works
         $mail->Port = 465;
 
         // Recipients
@@ -25,7 +25,7 @@
         $mail->isHTML(true);
         $mail->Subject = 'Complete Your Payment for Reservation #' . $reservation_id;
 
-        $paymentLink = "http://localhost/eventservices/main/payment.php?rid=$reservation_id"; // Adjust the link as needed
+        $paymentLink = "https://queenandknighteventservices.site/main/payment.php?rid=$reservation_id"; // Adjust the link as needed
         // $paymentLink = "http://localhost/eventservices/main/payment.php?rid=$reservation_id"; // Adjust the link as needed
 
         $mail->Body = "

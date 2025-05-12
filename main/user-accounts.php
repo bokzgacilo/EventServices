@@ -39,7 +39,7 @@
 
   </main>
   <script>
-    $(document).ready(function() {
+    $(document).ready(function () {
 
       $('#example').DataTable({
         "ajax": {
@@ -47,27 +47,59 @@
           "dataSrc": ""
         },
         columns: [{
-            data: 'id'
-          },
-          {
-            data: 'name'
-          },
-          {
-            data: 'email'
-          },
-          {
-            data: 'password'
-          },
-          {
-            data: 'id',
-            render: function(data, type, row) {
-              return `
-              <button class='btn btn-primary btn-sm'>Edit</button>
-              <button class='btn btn-danger btn-sm'>Delete</button>
-              `
-            }
-          },
+          data: 'id'
+        },
+        {
+          data: 'name'
+        },
+        {
+          data: 'email'
+        },
+        {
+          data: 'password',
+          render: function (data, type, row) {
+            return '*'.repeat(data.length);
+          }
+        },
+        {
+          data: 'id',
+          render: function (data, type, row) {
+            return `
+    <button class='btn btn-danger btn-sm delete-btn' data-id="${row.id}">Delete</button>
+  `;
+          }
+
+        },
         ]
+      });
+    });
+
+    $(document).on('click', '.delete-btn', function () {
+      const userId = $(this).data('id');
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "This action cannot be undone!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: 'api/delete_user.php',
+            method: 'POST',
+            data: { id: userId },
+            success: function (response) {
+              Swal.fire('Deleted!', 'User has been deleted.', 'success');
+              // Reload table if you're using DataTables:
+              $('#example').DataTable().ajax.reload();
+            },
+            error: function () {
+              Swal.fire('Error', 'Failed to delete user.', 'error');
+            }
+          });
+        }
       });
     });
   </script>

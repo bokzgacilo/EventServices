@@ -52,16 +52,18 @@
             <select id="what_to_export" class="col-4 form-control">
               <option value="packages">All Packages</option>
               <option value="reservations">All Reservations</option>
-              <option value="custom_packages">All Custom Packages</option>
               <option value="users">All User Accounts</option>
             </select>
           </div>
           <div class="col-2">
             <button id="export_btn" class="btn btn-success">Export</button>
-
+            <a id="download_link">Download</a>
           </div>
 
         </div>
+        <table id="example" class="table table-striped table-bordered" width="100%">
+
+        </table>
       </div>
     </div>
 
@@ -70,20 +72,150 @@
     $("#export_btn").on("click", function () {
       var what_to_export = $("#what_to_export").val();
       var time_range = $('input[name="timerange"]:checked').val();
+      $('#example').DataTable().clear().destroy();
+      $('#example').empty();
 
       $.ajax({
-        type: 'post',
+        type: 'POST',
         url: 'api/generate_reports/generate.php',
         data: {
-          target: what_to_export,
+          target: what_to_export, // 'users' or 'packages'
           range: time_range
         },
-        success: response => {
+        success: function (response) {
           console.log(response)
-          var json = JSON.parse(response)
-          location.href = "../main/api/generate_reports" + json.url;
+          $("#download_link").attr("href", "http://localhost/eventservices/main/api/generate_reports/" + response.url);
+
+          // Clear any existing table data
+          // Check if the response is valid
+          if (response.status === 'success') {
+            let tableData = response.tableData;
+
+            // Define columns based on target
+            if (what_to_export === 'users') {
+              // Users table columns
+              $('#example').DataTable({
+                data: tableData,
+                destroy: true, // Allows reinitializing the table
+                columns: [
+                  { data: 'name' },
+                  { data: 'email' },
+                  { data: 'type' },
+                  {
+                    data: 'created_at',
+                    render: function (data) {
+                      const date = new Date(data);
+                      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                      return date.toLocaleDateString('en-US', options); // Format as March 25, 2025
+                    }
+                  }
+                ]
+              });
+            } else if (what_to_export === 'reservations') {
+              // Reservations table columns
+              $('#example').DataTable({
+                data: tableData,
+                destroy: true, // Allows reinitializing the table
+                columns: [
+                  { data: 'id' },
+                  { data: 'pid' }, // Reservation package ID
+                  {
+                    data: 'price',
+                    render: function (data) {
+                      return '₱' + parseFloat(data).toLocaleString(); // Format price with ₱ symbol
+                    }
+                  },
+                  {
+                    data: 'event_date',
+                    render: function (data) {
+                      const date = new Date(data);
+                      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                      return date.toLocaleDateString('en-US', options); // Format event date as March 25, 2025
+                    }
+                  },
+                  {
+                    data: 'event_start',
+                    render: function (data) {
+                      const date = new Date(data);
+                      const options = { hour: '2-digit', minute: '2-digit', hour12: true };
+                      return date.toLocaleTimeString('en-US', options); // Format event start time as 11:00 AM
+                    }
+                  },
+                  {
+                    data: 'event_end',
+                    render: function (data) {
+                      const date = new Date(data);
+                      const options = { hour: '2-digit', minute: '2-digit', hour12: true };
+                      return date.toLocaleTimeString('en-US', options); // Format event end time as 12:00 PM
+                    }
+                  },
+                  { data: 'client_name' },
+                  { data: 'client_contact' },
+                  { data: 'client_email' },
+                  { data: 'venue' },
+                  {
+                    data: 'event_status',
+                    render: function (data) {
+                      return data === "1" ? 'Confirmed' : 'Pending'; // Format event status
+                    }
+                  },
+                  {
+                    data: 'payment_status',
+                    render: function (data) {
+                      return data === "1" ? 'Paid' : 'Unpaid'; // Format payment status
+                    }
+                  },
+                  {
+                    data: 'created_at',
+                    render: function (data) {
+                      const date = new Date(data);
+                      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                      return date.toLocaleDateString('en-US', options); // Format creation date as March 25, 2025
+                    }
+                  }
+                ]
+              });
+            }
+            else if (what_to_export === 'packages') {
+              // Packages table columns
+              $('#example').DataTable({
+                data: tableData,
+                destroy: true, // Allows reinitializing the table
+                columns: [
+                  { data: 'id' },
+                  { data: 'package_name' },
+                  { data: 'max_pax' },
+                  {
+                    data: 'package_price',
+                    render: function (data) {
+                      return '₱' + parseFloat(data).toLocaleString(); // Format price with ₱ symbol
+                    }
+                  },
+                  { data: 'type' },
+                  { data: 'inclusions' },
+                  {
+                    data: 'status',
+                    render: function (data) {
+                      return data === "1" ? 'Active' : 'Inactive'; // Format status
+                    }
+                  },
+                  {
+                    data: 'created_at',
+                    render: function (data) {
+                      const date = new Date(data);
+                      const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                      return date.toLocaleDateString('en-US', options); // Format as March 25, 2025
+                    }
+                  }
+                ]
+              });
+            }
+          } else {
+            alert('No data found or error in fetching data.');
+          }
         }
-      })
+      });
+
     })
   </script>
 </body>

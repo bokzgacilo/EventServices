@@ -114,11 +114,19 @@
           console.log(data)
 
           if (data == 1) {
-            alert("Price set successfully!");
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: 'Price set successfully!',
+            });
             $('#offerPriceModal').modal('hide');
             $('#example').DataTable().ajax.reload();
           } else {
-            alert("Error setting price: " + data);
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Error setting price: ' + data,
+            });
           }
         },
         complete: function() {

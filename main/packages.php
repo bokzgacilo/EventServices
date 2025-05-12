@@ -198,18 +198,22 @@
 
         var formdata = new FormData(this)
 
-        $.ajax({
-          url: 'api/create_new_package.php',
-          type: 'POST',
-          data: formdata,
-          contentType: false,
-          processData: false,
-          success: function (response) {
-            alert(response)
+       $.ajax({
+        url: 'api/create_new_package.php',
+        type: 'POST',
+        data: formdata,
+        contentType: false,
+        processData: false,
+        success: function (response) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Package Created',
+            text: response,
+          }).then(() => {
             location.reload();
-          }
-        });
-
+          });
+        }
+      });
       })
 
       $("#EditPackageForm").on('submit', function (e) {
@@ -274,12 +278,42 @@
         {
           data: 'id',
           render: function (data, type, row) {
-            return `<button class='btn btn-primary btn-sm' onclick="openEditModal(${data})">Edit</button>`;
+            return `
+      <button class='btn btn-primary btn-sm' onclick="openEditModal(${data})">Edit</button>
+      <button class='btn btn-danger btn-sm' onclick="confirmDelete(${data})">Delete</button>
+    `;
           }
         },
         ]
       });
     });
+
+    function confirmDelete(id) {
+  Swal.fire({
+    title: 'Are you sure?',
+    text: "This will delete the package permanently.",
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#d33',
+    cancelButtonColor: '#3085d6',
+    confirmButtonText: 'Yes, delete it!'
+  }).then((result) => {
+    if (result.isConfirmed) {
+      $.ajax({
+        url: 'api/delete_package.php',
+        type: 'POST',
+        data: { id: id },
+        success: function(response) {
+          Swal.fire('Deleted!', response, 'success');
+          $('#example').DataTable().ajax.reload();
+        },
+        error: function(xhr, status, error) {
+          Swal.fire('Error!', 'Failed to delete the package.', 'error');
+        }
+      });
+    }
+  });
+}
 
     function openEditModal(packageId) {
       $.ajax({

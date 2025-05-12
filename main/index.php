@@ -198,14 +198,28 @@ session_start();
           data: $(this).serialize(),
           success: function (response) {
             if (response == 1) {
-              alert("Quotation request sent successfully!");
+              Swal.fire({
+                icon: 'success',
+                title: 'Success',
+                text: 'Quotation request sent successfully!',
+              });
               $("#quotationModal").modal("hide");
             } else {
-              alert("Failed to send quotation request. Please try again.");
+              Swal.fire({
+                icon: 'error',
+                title: 'Failure',
+                text: 'Failed to send quotation request. Please try again.',
+              });
+
             }
           },
           error: function () {
-            alert("An error occurred. Please try again.");
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'An error occurred. Please try again.',
+            });
+
           }
         });
       })

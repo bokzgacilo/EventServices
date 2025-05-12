@@ -104,10 +104,18 @@ if (!$row) {
         contentType: false, // Required for FormData
         processData: false, // Required for FormData
         success: function (response) {
-          alert('Success: ' + response);
+          Swal.fire({
+            icon: 'success',
+            title: 'Success',
+            text: 'Success: ' + response,
+          });
         },
         error: function (jqXHR, textStatus, errorThrown) {
-          alert('Error: ' + textStatus + ' - ' + errorThrown);
+          Swal.fire({
+            icon: 'error',
+            title: 'Error',
+            text: 'Error: ' + textStatus + ' - ' + errorThrown,
+          });
         }
       });
     })

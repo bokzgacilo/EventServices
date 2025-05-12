@@ -235,7 +235,11 @@ $selected_user = $_SESSION['userid'];
     // const selectedBase64Images = []; // Reset base64 storage
 
     if (files.length > 3) {
-      alert("You can only upload up to 3 images.");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Limit Exceeded',
+        text: 'You can only upload up to 3 images.',
+      });
       return;
     }
 
@@ -264,9 +268,14 @@ $selected_user = $_SESSION['userid'];
     let userType = "client";
 
     if (message === "") {
-      alert("Message cannot be empty!");
+      Swal.fire({
+        icon: 'warning',
+        title: 'Message Required',
+        text: 'Message cannot be empty!',
+      });
       return;
     }
+
 
     let messageData = {
       timestamp: serverTimestamp(),

@@ -272,8 +272,13 @@ $conn->close();
         contentType: false,
         success: response => {
           if (response === "ok") {
-            alert("Reservation submitted!")
-            location.reload();
+            Swal.fire({
+              icon: 'success',
+              title: 'Reservation Submitted',
+              text: 'Your reservation has been submitted successfully!',
+            }).then(() => {
+              location.reload();
+            });
           }
         }
       })
