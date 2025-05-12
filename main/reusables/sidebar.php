@@ -66,10 +66,6 @@
 <div class="sidebar">
   <img class="img img-fluid align-self-center mt-4 mb-4" src="../images/logo3.png" width="90px" height="90px" />
   <h2 class="sidebar-title">Queen and Knights Event Services</h2>
-  <a href="index.php" class="sidebar-links mt-4">
-    <i class="fa-solid fa-globe"></i>
-    <p>Website</p>
-  </a>
   <a href="packages.php" class="sidebar-links mt-4">
     <i class="fa-solid fa-list"></i>
     <p>Packages</p>

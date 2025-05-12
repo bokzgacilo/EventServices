@@ -1,5 +1,5 @@
 <link rel="icon" type="image/png" href="../images/logo2.png">
-<link rel="stylesheet" href="styles/global.css/all.min.css">
+<link rel="stylesheet" href="styles/all.min.css">
 
 <style>
     @font-face {

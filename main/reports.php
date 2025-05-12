@@ -79,6 +79,7 @@
           range: time_range
         },
         success: response => {
+          console.log(response)
           var json = JSON.parse(response)
           location.href = "../main/api/generate_reports" + json.url;
         }
