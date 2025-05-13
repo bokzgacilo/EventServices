@@ -126,8 +126,14 @@ session_start();
     <div class="package-section" id="packages">
       <div class="d-flex flex-column flex-md-row align-items-center justify-content-between">
         <h1 class="event-title">PACKAGES OFFERED</h1>
-        <button class="btn btn-primary btn-lg" data-bs-toggle="modal" data-bs-target="#quotationModal">Custom
-          Package</button>
+        <button class="btn btn-primary btn-lg" id="custom-package-btn" 
+    <?php 
+        if (empty($_SESSION['userfullname'])) {
+            echo 'onclick="showLoginAlert()"';
+        } else {
+            echo 'data-bs-toggle="modal" data-bs-target="#quotationModal"';
+        }
+    ?>>Custom Package</button>
       </div>
       <div class="col-lg-2 col-12">
         <select class="form-select" id="select-category">
@@ -190,7 +196,20 @@ session_start();
     ?>
 
     <script>
-      
+      function showLoginAlert() {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Please Login',
+            text: 'You must log in to request a custom package.',
+            showCancelButton: true,
+            confirmButtonText: 'Login',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Trigger the login modal opening
+                document.querySelector('a.login-btn').click();  // Make sure a.login-btn exists in your HTML
+            }
+        });
+    }
 
 
       $(document).ready(function () {
