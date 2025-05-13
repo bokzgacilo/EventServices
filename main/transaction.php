@@ -25,6 +25,7 @@
             <tr>
               <th>ID</th>
               <th>Event ID</th>
+              <th>Client Name</th>
               <th>Reference Number</th>
               <th>Payment Date</th>
               <th>Date Created</th>
@@ -49,6 +50,9 @@
         },
         {
           data: 'event_id'
+        },
+        {
+          data: 'client_name'
         },
         {
           data: 'reference_number'

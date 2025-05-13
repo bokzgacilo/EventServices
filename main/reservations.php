@@ -55,6 +55,31 @@
       </div>
     </div>
 
+    <div class="modal fade" id="offerPriceModal" tabindex="-1" aria-labelledby="offerPriceModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Set Price</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <form id="setPriceForm">
+
+          <div class="modal-body">
+            <input type="hidden" name="client">
+            <input type="hidden" name="client_email">
+            <input type="hidden" name="custom_request_id">
+            <input type="number" class="form-control" name="price" required>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-success">Set</button>
+          </div>
+        </form>
+
+      </div>
+    </div>
+  </div>
+
     <div class="card">
       <div class="card-header">
         <h2 class="panel-title">Incoming Reservations</h2>
@@ -270,7 +295,8 @@
                     ? 'Waiting for payment'
                     : 'Waiting event to process';
                 case 'Pending':
-                  return 'Waiting for confirmation';
+                  return row.price == 0 || row.price === '0.00' ? 'No Price' : 'Waiting for confirmation';
+
                 case 'Completed':
                   return 'Event Completed';
                 case 'Cancelled':
@@ -289,23 +315,69 @@
               let buttons = '';
 
               if (row.event_status === 'Confirmed') {
-                const isDisabled = row.payment_status === 'Unpaid' ? 'disabled' : '';
-                buttons += `<button class='btn btn-primary btn-sm' onclick="OpenImportPicture(${data})" ${isDisabled}>Process</button>`;
-              }
+  if (row.payment_status === 'Paid') {
+    buttons += `<button class='btn btn-success btn-sm me-2' onclick="OpenImportPicture(${data})">Mark As Done</button>`;
+  }
+}
+
 
               if (row.event_status === 'Pending') {
-                buttons += `<button class='btn btn-primary btn-sm' onclick="updateEventStatus(${data}, 'confirmed')">Confirm</button>`;
+                if (!row.price || row.price == 0) {
+                  buttons += `<button class="btn btn-primary btn-sm offer-price-btn me-2" data-id="${row.id}" data-client="${row.client_name}" data-email="${row.client_email}">Set Price</button>`;
+                } else {
+                  buttons += `<button class='btn btn-primary btn-sm me-2' onclick="updateEventStatus(${data}, 'confirmed')">Confirm</button>`;
+                }
               }
 
               // Add Cancel button for events that are not already Cancelled or Completed
               if (row.event_status !== 'Cancelled' && row.event_status !== 'Completed') {
-                buttons += `<button class='ms-2 btn btn-danger btn-sm' onclick="updateEventStatus(${data}, 'cancelled')">Cancel</button>`;
+                buttons += `<button class='btn btn-danger btn-sm' onclick="updateEventStatus(${data}, 'cancelled')">Cancel</button>`;
               }
 
               return buttons;
             }
           }
         ]
+      });
+    });
+
+    $('#example').on('click', '.offer-price-btn', function() {
+      $("input[name='custom_request_id']").val($(this).data('id'));
+      $("input[name='client']").val($(this).data('client'));
+      $("input[name='client_email']").val($(this).data('email'));
+
+      $('#offerPriceModal').modal('show');
+    });
+
+    $("#setPriceForm").on("submit", function(e) {
+      e.preventDefault();
+      $('#loadingOverlay').css("display", "flex");
+      $.ajax({
+        url: "api/set_custom_price.php",
+        type: "POST",
+        data: $(this).serialize(),
+        success: function(data) {
+          console.log(data)
+
+          if (data == 1) {
+            Swal.fire({
+              icon: 'success',
+              title: 'Success',
+              text: 'Price set successfully!',
+            });
+            $('#offerPriceModal').modal('hide');
+            $('#example').DataTable().ajax.reload();
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Error',
+              text: 'Error setting price: ' + data,
+            });
+          }
+        },
+        complete: function() {
+          $('#loadingOverlay').css("display", "none");
+        }
       });
     });
   </script>

@@ -135,7 +135,6 @@
       });
     });
 
-
     function openClientModal(client) {
       $("#clientModal").modal("toggle")
       $.ajax({

@@ -76,11 +76,11 @@
     <p>Reservations</p>
     <span><?php echo $reservation_count; ?></span>
   </a>
-  <a href="custom_reservations.php" class="sidebar-links mt-4">
+  <!-- <a href="custom_reservations.php" class="sidebar-links mt-4">
     <i class="fa-solid fa-list"></i>
     <p>Custom Package Reservations</p>
     <span><?php echo $custom_count; ?></span>
-  </a>
+  </a> -->
   <a href="transaction.php" class="sidebar-links mt-4">
     <i class="fa-solid fa-list"></i>
     <p>Transactions</p>

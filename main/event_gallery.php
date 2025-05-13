@@ -3,18 +3,13 @@ session_start();
 include_once("api/connection.php");
 
 $sql = "SELECT 
-  er.id, 
-  er.event_date, 
-  er.client_name, 
-  er.venue, 
-  ep.type 
+  id, 
+  client_name,
+  event_date
 FROM 
-  event_reservations er
-JOIN 
-  event_packages ep ON er.pid = ep.id
+  event_reservations 
 WHERE 
-  er.event_status = 'Completed';
-";
+  event_status = 'Completed'";
 
 $result = $conn->query($sql);
 
@@ -68,7 +63,7 @@ if ($result->num_rows > 0) {
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div class="d-flex flex-column" id="event-detail-container">
+            <div class="d-flex flex-column gap-2 mb-4" id="event-detail-container">
 
             </div>
             <form id="feedbackForm" class="d-flex flex-row gap-2 justify-content-between align-items-start">
@@ -116,10 +111,9 @@ if ($result->num_rows > 0) {
 
                 <div class="d-flex flex-row justify-content-between p-4">
                   <a href="javascript:void(0);" class="open-modal" data-id="<?= $reservation['id'] ?>">
-                    <?= htmlspecialchars($reservation['client_name']) ?>'s <?= htmlspecialchars($reservation['type']) ?>
-                    Event
+                    <?= htmlspecialchars($reservation['client_name']) ?>'s Event
                   </a>
-                  <p><strong></strong> <?= htmlspecialchars(date('F j, Y', strtotime($reservation['event_date']))) ?></p>
+                  <p><strong></strong> <?= htmlspecialchars(string: date('F j, Y', strtotime($reservation['event_date']))) ?></p>
                 </div>
 
               </div>

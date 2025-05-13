@@ -47,7 +47,7 @@ foreach ($reservations as &$reservation) {
       $package = $resultPackageName->fetch_assoc();
       $reservation['package_name'] = $package['package_name'];
     } else {
-      $reservation['package_name'] = 'Unknown Package';
+      $reservation['package_name'] = 'Custom Package';
     }
   } else {
     $reservation['package_name'] = 'Custom Package';
@@ -117,10 +117,8 @@ $reqId = isset($_GET['req']) ? htmlspecialchars($_GET['req']) : '';
           <h5 class="modal-title" id="reservationModalLabel">Reservation Details</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body">
-          <p><strong>Reservation ID:</strong> <span id="reservationId"></span></p>
-          <p><strong>Client Name:</strong> <span id="clientName"></span></p>
-          <p><strong>Other Details:</strong> <span id="otherDetails"></span></p>
+        <div class="modal-body" id="reservation-details">
+         
         </div>
       </div>
     </div>
@@ -137,17 +135,12 @@ $reqId = isset($_GET['req']) ? htmlspecialchars($_GET['req']) : '';
 
       $.ajax({
         url: "api/get_reservation_details.php",
-        type: "GET",
+        type: "post",
         data: {
           req: reqId
         },
         success: function(response) {
-          let data = JSON.parse(response);
-
-          // Update modal content with reservation details
-          $('#reservationId').text(data.id);
-          $('#clientName').text(data.client_name);
-          $('#otherDetails').text(data.other_details);
+         $("#reservation-details").html(response)
         },
         error: function() {
           $('#reservationId').text('Error loading details.');

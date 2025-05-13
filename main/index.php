@@ -33,34 +33,41 @@ session_start();
           <h5 class="modal-title" id="quotationModalLabel">Create Your Own Package</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body d-flex flex-column gap-4">
-          <form id="quotationForm">
-
+        <div class="modal-body ">
+          <form id="quotationForm" class="d-flex flex-column gap-2">
             <p class="fw-semibold">Please fill out the form to request a quotation.</p>
             <div class="form-group">
-              <p class="form-label">Number of Pax</p>
+              <p class="form-label fw-semibold">Event Date</p>
+              <input type="date" class="form-control" name="date" required>
+            </div>
+            <div class="form-group">
+              <p class="form-label fw-semibold">Venue</p>
+              <input type="text" class="form-control" name="venue" placeholder="Address of venue" required>
+            </div>
+            <div class="form-group">
+              <p class="form-label fw-semibold">Number of Pax</p>
               <input type="number" class="form-control" name="pax" placeholder="Enter number of guests" required>
             </div>
             <div class="form-group">
-              <label for="chairs" class="form-label">Number of Chairs</label>
+              <label for="chairs" class="form-label fw-semibold">Number of Chairs</label>
               <input type="number" class="form-control" name="chairs" placeholder="Enter number of chairs" required>
             </div>
             <div class="form-group">
-              <label for="tables" class="form-label">Number of Tables</label>
+              <label for="tables" class="form-label fw-semibold">Number of Tables</label>
               <input type="number" class="form-control" name="tables" placeholder="Enter number of tables" required>
             </div>
             <div class="form-group">
-              <label class="form-label">Catering Service Inclusions</label>
+              <label class="form-label fw-semibold">Catering Service Inclusions</label>
               <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="inclusion[]" id="foodService"
                   value="Food Service">
                 <label class="form-check-label" for="foodService">Food Service</label>
               </div>
               <div id="foodDetails" class="mt-2 mb-2" style="display: none;">
-                <label for="allergy" class="form-label">Allergy Details</label>
+                <label for="allergy" class="form-label fw-semibold">Allergy Details</label>
                 <input type="text" class="form-control" name="allergy" placeholder="Enter allergy details">
 
-                <label for="menu" class="form-label mt-2">Preferred Menu</label>
+                <label for="menu" class="form-label mt-2 fw-semibold">Preferred Menu</label>
                 <input type="text" class="form-control" name="menu" placeholder="Enter preferred menu">
               </div>
               <div class="form-check">
@@ -87,6 +94,11 @@ session_start();
                 <input class="form-check-input" type="checkbox" name="inclusion[]" value="Lights and Sound System">
                 <label class="form-check-label" for="clown">Lights and Sound System</label>
               </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label fw-semibold">Contact Number</label>
+              <input type="text" class="form-control" name="contact_number" placeholder="0976222095X" required>
+              <span>Please ensure that it is active, capable of receiving calls, and able to respond.</span>
             </div>
         </div>
         <div class="modal-footer">

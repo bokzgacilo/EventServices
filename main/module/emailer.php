@@ -9,15 +9,15 @@
   
     try {
       $mail->isSMTP();
-        $mail->Host = 'smtp.hostinger.com';
-        $mail->SMTPAuth = true;
-        $mail->Username = 'support@queenandknighteventservices.site';
-        $mail->Password = '2/fF9>|Jk';
-        $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // 'ssl' also works
-        $mail->Port = 465;
+      $mail->Host = 'smtp.hostinger.com';
+      $mail->SMTPAuth = true;
+      $mail->Username = 'support@queenandknighteventservices.site';
+      $mail->Password = '2/fF9>|Jk';
+      $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // 'ssl' also works
+      $mail->Port = 465;
 
         // Recipients
-        $mail->setFrom('support@queenandknighteventservices.site', 'Queens And Knights Support');
+      $mail->setFrom('support@queenandknighteventservices.site', 'Queens And Knights Support');
       $mail->addAddress($email, $name);
   
       // Content

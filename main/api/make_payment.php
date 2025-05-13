@@ -1,6 +1,8 @@
 <?php
 include_once("connection.php");
+session_start();
 
+$userFullName = $_SESSION['userfullname'];
 $reservation_id = $_POST['reservation_id'] ?? '';
 $reference_number = $_POST['reference_number'] ?? '';
 $payment_date = $_POST['payment_date'] ?? '';
@@ -45,9 +47,9 @@ if (isset($_FILES['payment_receipt']) && $_FILES['payment_receipt']['error'] ===
     $stmtUpdate->execute();
 
     // 2. Insert into payment
-    $insertSql = "INSERT INTO payments (event_id, payment_date, reference_number, receipt_path) VALUES (?, ?, ?, ?)";
+    $insertSql = "INSERT INTO payments (event_id, client_name, payment_date, reference_number, receipt_path) VALUES (?, ?, ?, ?, ?)";
     $stmtInsert = $conn->prepare($insertSql);
-    $stmtInsert->bind_param("isss", $reservation_id, $payment_date, $reference_number, $receipt_path);
+    $stmtInsert->bind_param("issss", $reservation_id, $userFullName, $payment_date, $reference_number, $receipt_path);
     $stmtInsert->execute();
 
     echo "Payment recorded successfully.";

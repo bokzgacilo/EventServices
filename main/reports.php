@@ -84,7 +84,8 @@
         },
         success: function (response) {
           console.log(response)
-          $("#download_link").attr("href", "http://localhost/eventservices/main/api/generate_reports/" + response.url);
+          // $("#download_link").attr("href", "http://localhost/eventservices/main/api/generate_reports/" + response.url);
+          $("#download_link").attr("href", "https://queenandknighteventservices.site/main/api/generate_reports/" + response.url);
 
           // Clear any existing table data
           // Check if the response is valid

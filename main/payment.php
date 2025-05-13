@@ -108,7 +108,15 @@ if (!$row) {
             icon: 'success',
             title: 'Success',
             text: 'Success: ' + response,
+            showCancelButton: true,
+            confirmButtonText: 'Yes',
+            cancelButtonText: 'No'
+          }).then((result) => {
+            if (result.isConfirmed) {
+              window.location.href = 'my-account.php';
+            }
           });
+
         },
         error: function (jqXHR, textStatus, errorThrown) {
           Swal.fire({

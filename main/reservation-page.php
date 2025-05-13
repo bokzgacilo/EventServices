@@ -229,6 +229,7 @@ $conn->close();
 
     $(document).ready(function() {
       var reservedDates = <?php echo $datesJSON; ?>;
+      var userFullname = <?= json_encode($_SESSION['userfullname'] ?? '') ?>;
       var calendarEl = document.getElementById('calendar');
 
       var calendar = new FullCalendar.Calendar(calendarEl, {
@@ -248,11 +249,27 @@ $conn->close();
           var clickedDate = info.dateStr;
 
           if (!reservedDates.includes(clickedDate)) {
-            $("input[name='event_date']").val(info.dateStr);
-
-            $('#eventModal').modal('toggle');
+            // Only proceed if userFullname is defined and not empty
+            if (userFullname && userFullname.trim() !== '') {
+              $("input[name='event_date']").val(clickedDate);
+              $('#eventModal').modal('toggle');
+            } else {
+              Swal.fire({
+                title: 'Login Required',
+                text: 'Please log in to book an event.',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Login',
+                cancelButtonText: 'Cancel'
+              }).then((result) => {
+                if (result.isConfirmed) {
+                  document.querySelector('a.login-btn')?.click();
+                }
+              });
+            }
           }
         }
+
       });
 
       calendar.render();

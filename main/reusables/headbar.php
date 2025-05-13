@@ -280,6 +280,26 @@
   </div>
 </div>
 
+<!-- Terms and Conditions Modal (Stacked) -->
+<div class="modal fade" id="termsModal" tabindex="-1" aria-labelledby="termsModalLabel" aria-hidden="true" data-bs-backdrop="static">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="termsModalLabel">Terms and Conditions</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <p>
+          By using our platform, you agree to abide by the rules and regulations outlined herein. Please read all terms carefully.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- OTP SIGNUP Modal -->
 <div class="modal fade" id="otpSignupModal" tabindex="-1" aria-labelledby="otpModalLabel" aria-hidden="true">
   <div class="modal-dialog">
@@ -342,9 +362,16 @@
   }
   ?>
 
-  $('#termsCheck').on('change', function () {
-    if ($(this).is(':checked')) {
+$('#termsCheck').on('change', function () {
+    if (this.checked) {
       $('#signup-button').removeAttr('disabled');
+
+      // Show the terms modal without hiding the signup modal
+      var termsModal = new bootstrap.Modal(document.getElementById('termsModal'), {
+        backdrop: 'static',
+        keyboard: false
+      });
+      termsModal.show();
     } else {
       $('#signup-button').attr('disabled', 'disabled');
     }
