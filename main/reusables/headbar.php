@@ -6,13 +6,10 @@
     width: 100%;
     height: 100%;
     background: rgba(0, 0, 0, 0.4);
-    /* Transparent Gray */
     display: none;
     justify-content: center;
     align-items: center;
     z-index: 1056;
-    /* display: none; */
-    /* Initially Hidden */
   }
 
   nav {
@@ -259,13 +256,28 @@
         <form id="signupform">
           <h1 class="mb-4 fw-bold">Signup</h1>
           <p>Full Name</p>
-          <input class="form-control mb-4" name="signup_fullname" type="text" required />
+          <input class="form-control mb-4" placeholder="Juan Dela Cruz" name="signup_fullname" type="text" required />
           <p>Email</p>
-          <input class="form-control mb-4" name="signup_email" type="email" required />
+          <input class="form-control" placeholder="j.delacruz@gmail.com" name="signup_email" type="email" required />
+          <p style="font-family: Arial; font-size: 14px;" class="fw-semibold mb-4">Note: Make sure this is active; an OTP will be sent to this address later.</p>
+          <p>Contact Number</p>
+          <div class="input-group input-group-lg">
+            <span class="input-group-text" id="basic-addon1">+63</span>
+            <input 
+              type="tel"
+              class="form-control" 
+              placeholder="976222095X" 
+              name="signup_contact" 
+              name="signup_contact"
+              pattern="\d{10}"
+              maxlength="10" 
+              required>
+          </div>
+          <p style="font-family: Arial; font-size: 14px;" class="fw-semibold mb-4">Note: Make sure this is active; an OTP will be sent to this address later.</p>
           <p>Password</p>
-          <input class="form-control mb-4" name="signup_password" type="password" required />
+          <input class="form-control mb-4" placeholder="Password" name="signup_password" type="password" required />
           <p>Confirm Password</p>
-          <input class="form-control mb-4" name="signup_confirm_password" type="password" required />
+          <input class="form-control mb-4" placeholder="Confirm Password" name="signup_confirm_password" type="password" required />
           <p class="mb-4 mt-2" id="password_error"></p>
           <div class="form-check">
             <input class="form-check-input" type="checkbox" value="" id="termsCheck">
@@ -313,10 +325,16 @@
           <input type="hidden" name="hidden_signup_name">
           <input type="hidden" name="hidden_signup_email">
           <input type="hidden" name="hidden_signup_password">
+          <input type="hidden" name="hidden_signup_contact">
 
           <div class="mb-3">
-            <label for="otpInput" class="form-label">OTP Code</label>
-            <input type="number" class="form-control" name="otp" id="otpInput" required>
+            <label class="form-label">Email OTP Code</label>
+            <input type="number" class="form-control" name="otp" required>
+          </div>
+
+          <div class="mb-3">
+            <label class="form-label">SMS OTP Code</label>
+            <input type="number" class="form-control" name="sms_otp" required>
           </div>
 
           <button type="submit" class="btn btn-success">Complete Signup</button>
@@ -478,6 +496,7 @@ $('#termsCheck').on('change', function () {
           $("input[name='hidden_signup_name']").val(response.data.signup_fullname)
           $("input[name='hidden_signup_email']").val(response.data.signup_email)
           $("input[name='hidden_signup_password']").val(response.data.signup_password)
+          $("input[name='hidden_signup_contact']").val(response.data.signup_contact)
 
           $("#signupModal").modal("toggle");
           $("#otpSignupModal").modal("toggle");

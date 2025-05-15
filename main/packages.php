@@ -87,7 +87,6 @@
               <select class="form-control form-control-sm" name="edit_category" required>
                 <option value="Birthday">Birthday</option>
                 <option value="Wedding">Wedding</option>
-                <option value="Funeral">Funeral</option>
                 <option value="Party">Party</option>
                 <option value="Other">Other</option>
               </select>
@@ -138,7 +137,6 @@
               <select class="form-control form-control-sm" name="category" required>
                 <option value="Birthday">Birthday</option>
                 <option value="Wedding">Wedding</option>
-                <option value="Funeral">Funeral</option>
                 <option value="Party">Party</option>
                 <option value="Other">Other</option>
               </select>

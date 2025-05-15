@@ -77,11 +77,29 @@ if (!$row) {
           <p>Event ID</p>
           <p><?php echo $reservation_id; ?></p>
         </div>
-        <div class="d-flex flex-row justify-content-between">
-          <h5 class="fw-bold">Total</h5>
+        <div class="mb-2 d-flex flex-row justify-content-between">
+          <p>Total Amount Due <small class="text-muted">(after event)</small></p>
           <p><?php echo '₱' . number_format($row['price'], 2); ?></p>
         </div>
-        <button type="submit" class="btn btn-success btn-lg mt-4">Confirm Payment</button>
+        <div class="mb-2 d-flex flex-row justify-content-between">
+          <h5 class="fw-bold text-danger">Down Payment</h5>
+          <h5 class="fw-bold text-danger">₱5,000.00</h5>
+        </div>
+        <hr />
+        <h5>Terms and Conditions</h5>
+        <div class="form-check mb-2">
+          <input class="form-check-input" type="checkbox" id="noRefundCheckbox">
+          <label class="form-check-label" for="noRefundCheckbox">
+            I understand that the ₱5,000 down payment is <strong>non-refundable</strong>.
+          </label>
+        </div>
+        <div class="form-check mb-3">
+          <input class="form-check-input" type="checkbox" id="rescheduleCheckbox">
+          <label class="form-check-label" for="rescheduleCheckbox">
+            I acknowledge that <strong>reschedule concerns</strong> must be coordinated with the admin.
+          </label>
+        </div>
+        <button id="confirmBtn" type="submit" class="btn btn-success btn-lg mt-2" disabled>Pay Down Payment</button>
       </div>
     </form>
   </div>
@@ -92,6 +110,15 @@ if (!$row) {
     ?>
   </footer>
   <script>
+    $(document).ready(function () {
+      function toggleButton() {
+        const bothChecked = $('#noRefundCheckbox').is(':checked') && $('#rescheduleCheckbox').is(':checked');
+        $('#confirmBtn').prop('disabled', !bothChecked);
+      }
+
+      $('#noRefundCheckbox, #rescheduleCheckbox').on('change', toggleButton);
+    });
+
     $("#paymentForm").on("submit", function (e) {
       e.preventDefault();
       var formData = new FormData(this);
@@ -107,7 +134,7 @@ if (!$row) {
           Swal.fire({
             icon: 'success',
             title: 'Success',
-            text: 'Success: ' + response,
+            text: 'Payment recorded successfully',
             showCancelButton: true,
             confirmButtonText: 'Yes',
             cancelButtonText: 'No'

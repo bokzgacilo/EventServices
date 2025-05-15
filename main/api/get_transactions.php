@@ -2,7 +2,17 @@
   // include_once 'connection.php';
   include("connection.php");
 
-  $query = "SELECT * FROM payments";
+  $query = "
+    SELECT 
+      payments.*, 
+      event_reservations.payment_status 
+    FROM 
+      payments 
+    LEFT JOIN 
+      event_reservations 
+    ON 
+      payments.event_id = event_reservations.id
+  ";
   $result = mysqli_query($conn, $query);
 
   if (!$result) {

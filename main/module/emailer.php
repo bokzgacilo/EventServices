@@ -3,7 +3,6 @@
   use PHPMailer\PHPMailer\Exception;
   
   require '../../vendor/autoload.php';
-
   function sendOtpToEmail($email, $name, $otp) {
     $mail = new PHPMailer(true);
   
@@ -19,12 +18,12 @@
         // Recipients
       $mail->setFrom('support@queenandknighteventservices.site', 'Queens And Knights Support');
       $mail->addAddress($email, $name);
-  
+      
+      $message = "Dear $name,<br><br>Your OTP code is <strong>$otp</strong>.<br><br>Please use this code to complete your login.<br><br>Best regards,<br>Queen and Knights Event Services";
       // Content
       $mail->isHTML(true);
       $mail->Subject = 'Your OTP Code';
-      $mail->Body = "Dear $name,<br><br>Your OTP code is <strong>$otp</strong>.<br><br>Please use this code to complete your login.<br><br>Best regards,<br>Queen and Knights Event Services";
-  
+      $mail->Body = $message;
       $mail->send();
     } catch (Exception $e) {
       echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";

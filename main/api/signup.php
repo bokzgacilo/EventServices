@@ -2,7 +2,7 @@
 
 include_once("../module/emailer.php");
 include_once("connection.php");
-
+include_once("../../sms.php");
 
 header("Content-Type: application/json");
 session_start();
@@ -25,21 +25,31 @@ switch($_GET['step']){
     $fullname = $_POST['signup_fullname'];
     $email = $_POST['signup_email'];
     $password = $_POST['signup_password'];
+    $contact = $_POST['signup_contact'];
     $otp = rand(100000, 999999);
+    $sms_otp = rand(100000, 999999);
 
     $sql = "SELECT * FROM tbl_users WHERE email = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("s", $email);
     $stmt->execute();
     $result = $stmt->get_result();
+
+    $message = "Your OTP code for signup is: $sms_otp
+
+If you did not request this, please disregard this message.
+
+- Queen And Knights Event Services";
+
     
     if ($result->num_rows > 0) {
       echo json_encode(["status" => "error", "message" => "Email already exists"]);
     } else {
-      $createOTP = $conn -> prepare("INSERT INTO pre_signup_otp (email, otp) VALUES (?,?)");
-      $createOTP -> bind_param("si", $email, $otp);
+      $createOTP = $conn -> prepare("INSERT INTO pre_signup_otp (email, otp, sms_otp) VALUES (?,?, ?)");
+      $createOTP -> bind_param("sii", $email, $otp, $sms_otp);
 
       if($createOTP -> execute()){
+        sendSms("+63$contact", $message);
         sendSignupOtpToEmail($email, $fullname, $otp);
         echo json_encode(["status" => "success", "message" => "Ready to create", "data" => $_POST]);
       }else {
@@ -51,9 +61,11 @@ switch($_GET['step']){
     $fullname = $_POST['hidden_signup_name'];
     $email = $_POST['hidden_signup_email'];
     $password = $_POST['hidden_signup_password'];
+    $contact = "+63".$_POST['hidden_signup_contact'];
     $otp = $_POST['otp'];
+    $sms_otp = $_POST['sms_otp'];
 
-    $select = $conn -> prepare("SELECT otp FROM pre_signup_otp WHERE email = ?");
+    $select = $conn -> prepare("SELECT otp, sms_otp FROM pre_signup_otp WHERE email = ?");
     $select -> bind_param("s", $email);
     $select -> execute();
     $result = $select -> get_result();
@@ -61,10 +73,10 @@ switch($_GET['step']){
     if($result -> num_rows > 0){
       $row = $result -> fetch_assoc();
 
-      if($row['otp'] == $otp){
-        $insertSql = "INSERT INTO tbl_users (name, email, password) VALUES (?, ?, ?)";
+      if($row['otp'] == $otp && $row['sms_otp'] == $sms_otp){
+        $insertSql = "INSERT INTO tbl_users (name, email, password, contact_number) VALUES (?, ?, ?, ?)";
         $insertStmt = $conn->prepare($insertSql);
-        $insertStmt->bind_param("sss", $fullname, $email, $password);
+        $insertStmt->bind_param("ssss", $fullname, $email, $password, $contact);
   
         if ($insertStmt->execute()) {
           $_SESSION['userid'] = $insertStmt->insert_id;
@@ -78,7 +90,7 @@ switch($_GET['step']){
         deleteFromSignupTable($email);
         $insertStmt->close();
       }else {
-        echo json_encode(["status" => "mismatch-otp", "message" => "Wrong OTP Code", "description" => "You provided wrong otp code. Signup process will be aborted"]);
+        echo json_encode(["status" => "mismatch-otp", "message" => "Wrong OTP Codes", "description" => "You provided wrong otp code. Signup process will be aborted"]);
         deleteFromSignupTable($email);
         exit();
       }

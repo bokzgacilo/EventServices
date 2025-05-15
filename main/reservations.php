@@ -55,30 +55,31 @@
       </div>
     </div>
 
-    <div class="modal fade" id="offerPriceModal" tabindex="-1" aria-labelledby="offerPriceModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Set Price</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    <div class="modal fade" id="offerPriceModal" tabindex="-1" aria-labelledby="offerPriceModalLabel"
+      aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title">Set Price</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          </div>
+          <form id="setPriceForm">
+
+            <div class="modal-body">
+              <input type="hidden" name="client">
+              <input type="hidden" name="client_email">
+              <input type="hidden" name="custom_request_id">
+              <input type="number" class="form-control" name="price" required>
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              <button type="submit" class="btn btn-success">Set</button>
+            </div>
+          </form>
+
         </div>
-        <form id="setPriceForm">
-
-          <div class="modal-body">
-            <input type="hidden" name="client">
-            <input type="hidden" name="client_email">
-            <input type="hidden" name="custom_request_id">
-            <input type="number" class="form-control" name="price" required>
-          </div>
-          <div class="modal-footer">
-            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-success">Set</button>
-          </div>
-        </form>
-
       </div>
     </div>
-  </div>
 
     <div class="card">
       <div class="card-header">
@@ -315,10 +316,10 @@
               let buttons = '';
 
               if (row.event_status === 'Confirmed') {
-  if (row.payment_status === 'Paid') {
-    buttons += `<button class='btn btn-success btn-sm me-2' onclick="OpenImportPicture(${data})">Mark As Done</button>`;
-  }
-}
+                if (row.payment_status === 'Partially Paid') {
+                  buttons += `<button class='btn btn-success btn-sm me-2' onclick="OpenImportPicture(${data})">Mark As Done</button>`;
+                }
+              }
 
 
               if (row.event_status === 'Pending') {
@@ -341,7 +342,7 @@
       });
     });
 
-    $('#example').on('click', '.offer-price-btn', function() {
+    $('#example').on('click', '.offer-price-btn', function () {
       $("input[name='custom_request_id']").val($(this).data('id'));
       $("input[name='client']").val($(this).data('client'));
       $("input[name='client_email']").val($(this).data('email'));
@@ -349,14 +350,14 @@
       $('#offerPriceModal').modal('show');
     });
 
-    $("#setPriceForm").on("submit", function(e) {
+    $("#setPriceForm").on("submit", function (e) {
       e.preventDefault();
       $('#loadingOverlay').css("display", "flex");
       $.ajax({
         url: "api/set_custom_price.php",
         type: "POST",
         data: $(this).serialize(),
-        success: function(data) {
+        success: function (data) {
           console.log(data)
 
           if (data == 1) {
@@ -375,7 +376,7 @@
             });
           }
         },
-        complete: function() {
+        complete: function () {
           $('#loadingOverlay').css("display", "none");
         }
       });

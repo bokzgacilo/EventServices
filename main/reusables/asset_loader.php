@@ -20,6 +20,7 @@
 <link rel="stylesheet" href="../assets/datatable/dataTable.bootstrap5.css" />
 <link rel="stylesheet" href="styles/global.css" />
 <link rel="stylesheet" href="styles/styles.css" />
+<script src="../sms.js"></script>
 <script src="../jquery.js"></script>
 <script src="../assets/swal.js"></script>
 <script src="../assets/datatable/dataTable.js"></script>

@@ -83,12 +83,21 @@
         },
         {
           data: 'receipt_path',
-          render: function (data) {
+          render: function (data, type, row) {
             if (data) {
               // Remove "../" or "../../" from path
               let cleanPath = data.replace(/^\.\.\//, '');
-              return `<a href="${cleanPath}" target="_blank" class="btn btn-sm btn-primary">View Receipt</a>`;
 
+              // Only show "Confirm Payment" if status is not "Paid" or "Partially Paid"
+              let confirmBtn = '';
+              if (row.payment_status !== 'Paid' && row.payment_status !== 'Partially Paid') {
+                confirmBtn = `<button class="btn btn-sm btn-success confirm-payment-btn" data-event-id="${row.event_id}">Confirm Payment</button>`;
+              }
+
+              return `
+        ${confirmBtn}
+        <a href="${cleanPath}" target="_blank" class="btn btn-sm btn-primary">View Receipt</a>
+      `;
             } else {
               return `<span class="text-muted">No Receipt</span>`;
             }
@@ -97,6 +106,36 @@
         ]
       });
     });
+
+    $(document).on('click', '.confirm-payment-btn', function () {
+      const eventId = $(this).data('event-id');
+
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "Confirm payment for this reservation?",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, confirm it!',
+        cancelButtonText: 'Cancel'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          $.ajax({
+            url: 'api/confirm_payment.php',
+            method: 'POST',
+            data: { event_id: eventId },
+            success: function (response) {
+              Swal.fire('Confirmed!', 'Payment has been marked as partially paid.', 'success');
+              // Optionally reload the table
+              $('#example').DataTable().ajax.reload();
+            },
+            error: function () {
+              Swal.fire('Error!', 'Failed to confirm payment.', 'error');
+            }
+          });
+        }
+      });
+    });
+
   </script>
 </body>
 

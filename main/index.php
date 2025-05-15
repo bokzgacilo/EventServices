@@ -139,7 +139,6 @@ session_start();
         <select class="form-select" id="select-category">
           <option>Birthday</option>
           <option>Wedding</option>
-          <option>Funeral</option>
           <option>Party</option>
           <option>Other</option>
         </select>

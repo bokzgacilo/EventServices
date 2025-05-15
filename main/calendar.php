@@ -3,7 +3,13 @@ include("api/connection.php");
 $reservedDates = [];
 $events = [];
 
-$get_all_reserved_dates = $conn->query("SELECT event_date, venue, client_name FROM event_reservations");
+$get_all_reserved_dates = $conn->query("
+  SELECT event_date, event_start, event_end, venue, client_name 
+  FROM event_reservations 
+  WHERE (payment_status = 'Paid' OR payment_status = 'Partially Paid') 
+    AND (event_status = 'Confirmed' OR event_status = 'Completed')
+");
+
 if ($get_all_reserved_dates->num_rows > 0) {
   while ($row = $get_all_reserved_dates->fetch_assoc()) {
     $reservedDates[] = $row['event_date'];
@@ -11,6 +17,8 @@ if ($get_all_reserved_dates->num_rows > 0) {
       "venue" => $row['venue'],
       "client_name" => $row['client_name'],
       "event_date" => $row['event_date'],
+      "event_start" => $row['event_start'],
+      "event_end" => $row['event_end'],
     ];
   }
 } else {
@@ -41,6 +49,10 @@ $datesJSON = json_encode($reservedDates);
       background-color: red !important;
       color: white !important;
     }
+
+    .fc .fc-bg-event {
+      opacity: 1 !important;
+    }
   </style>
   <?php
   include 'reusables/sidebar.php';
@@ -53,13 +65,18 @@ $datesJSON = json_encode($reservedDates);
       <div class="card-body">
         <?php
         foreach ($events as $key => $event) {
+          $eventDate = date('F j, Y', strtotime($event['event_date']));
+          $startTime = date('g:iA', strtotime($event['event_start']));
+          $endTime = date('g:iA', strtotime($event['event_end']));
+          $formattedDateTime = "$eventDate $startTime - $endTime";
+
           echo "
               <div class='card mb-2'>
                 <div class='card-body'>
-                  <h5 class='fw-bold'>" . $event['client_name'] . "</h5>
-                  <div class='d-flex flex-row align-items-center justify-content-between'>
+                  <p class='fw-bold'>" . $event['client_name'] . "</p]>
+                  <div class='d-flex flex-column'>
                     <p class='fw-semibold'>" . $event['venue'] . "</p>                  
-                    <p class='fw-semibold'>" . $event['event_date'] . "</p>                  
+                    <p class='fw-semibold'>" . $formattedDateTime . "</p>                 
                   </div>
                 </div>
               </div>
@@ -100,57 +117,52 @@ $datesJSON = json_encode($reservedDates);
 
   <script>
     $(document).ready(function () {
-      var reservedDates = <?php echo $datesJSON; ?>;
-      var calendarEl = document.getElementById('calendar');
-
-      var today = new Date();
-      var todayStr = today.toISOString().split('T')[0];
-      var events = [];
+      const reservedDates = <?php echo $datesJSON; ?>; // must be array of 'YYYY-MM-DD'
+      const calendarEl = document.getElementById('calendar');
+      const today = new Date();
+      const todayStr = today.toLocaleDateString('en-CA'); 
+      const dateColors = {}; // Store one background color per date
 
       reservedDates.forEach(function (dateStr) {
-        var date = new Date(dateStr);
-        var color = "red"; // default for future reserved
-
+        // Normalize date comparison
         if (dateStr === todayStr) {
-          color = "green"; // Ongoing Event
-        } else if (date < today) {
-          color = "gray"; // Past Reserved
+          dateColors[dateStr] = 'green'; // Ongoing
+        } else if (dateStr < todayStr) {
+          dateColors[dateStr] = 'gray'; // Past
+        } else {
+          dateColors[dateStr] = 'red'; // Future
         }
-
-        events.push({
-          start: dateStr,
-          end: dateStr,
-          display: 'background',
-          backgroundColor: color
-        });
       });
 
-      // Highlight current date if not reserved
-      if (!reservedDates.includes(todayStr)) {
-        events.push({
-          start: todayStr,
-          end: todayStr,
-          display: 'background',
-          backgroundColor: "yellow"
-        });
+      // If today is not in reservedDates, mark it yellow
+      if (!dateColors[todayStr]) {
+        dateColors[todayStr] = 'yellow';
       }
 
-      var calendar = new FullCalendar.Calendar(calendarEl, {
+      // Convert dateColors into background events
+      const events = Object.entries(dateColors).map(([dateStr, color]) => ({
+        start: dateStr,
+        end: dateStr,
+        display: 'background',
+        backgroundColor: color
+      }));
+
+      // Init FullCalendar
+      const calendar = new FullCalendar.Calendar(calendarEl, {
         initialView: 'dayGridMonth',
         events: events,
         dateClick: function (info) {
-          var clickedDate = info.dateStr;
+          const clickedDate = info.dateStr;
 
           if (!reservedDates.includes(clickedDate)) {
-            // Do something on available date
+            // Available date clicked, do something here
           }
         }
       });
 
-
-
       calendar.render();
     });
+
   </script>
 </body>
 

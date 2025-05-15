@@ -55,7 +55,7 @@ if ($result->num_rows > 0) {
     include_once("reusables/headbar.php");
     ?>
 
-    <div class="modal fade" id="eventDetailsModal" aria-labelledby="eventDetailsModalLabel" aria-hidden="true">
+    <div class="modal modal-xl fade" id="eventDetailsModal" aria-labelledby="eventDetailsModalLabel" aria-hidden="true">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header">
@@ -63,16 +63,20 @@ if ($result->num_rows > 0) {
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
           </div>
           <div class="modal-body">
-            <div class="d-flex flex-column gap-2 mb-4" id="event-detail-container">
-
+            <div class="row">
+              <div class="col-6 d-flex flex-column gap-2" id="event-detail-container">
+                
+              </div>
+              <div class="col-6 d-flex flex-column">
+                <div id="feedbacks-container"></div>
+                <form id="feedbackForm" class="d-flex flex-row gap-2 justify-content-between align-items-start">
+                  <input type="hidden" name="event_id_feedback" />
+                  <textarea class="form-control auto-resize" name="feedback" rows="1"
+                    placeholder="Write a comment..." required></textarea>
+                  <button type="submit" class="btn btn-primary">Comment</button>
+                </form>
+              </div>
             </div>
-            <form id="feedbackForm" class="d-flex flex-row gap-2 justify-content-between align-items-start">
-              <input type="hidden" name="event_id_feedback" />
-              <textarea class="form-control form-control-sm auto-resize" name="feedback" rows="1"
-                placeholder="Write a comment..." required></textarea>
-              <button type="submit" class="btn btn-primary btn-sm">Comment</button>
-            </form>
-
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
@@ -165,6 +169,7 @@ if ($result->num_rows > 0) {
 
     $(".open-modal").on("click", function () {
       var event_id = $(this).attr("data-id");
+
       $.ajax({
         type: 'get',
         url: "api/get_event_details.php",
@@ -175,6 +180,17 @@ if ($result->num_rows > 0) {
           $("input[name='event_id_feedback']").val(event_id)
           $("#eventDetailsModal").modal("show")
           $("#event-detail-container").html(response)
+        }
+      })
+
+      $.ajax({
+        type: 'get',
+        url: "api/get_all_feedbacks.php",
+        data: {
+          event_id: event_id
+        },
+        success: response => {
+          $("#feedbacks-container").html(response)
         }
       })
     })

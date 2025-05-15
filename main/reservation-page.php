@@ -56,19 +56,21 @@ $conn->close();
     }
 
     .hero-img {
-        width: 100%; height: 600px; object-fit: cover;
-      }
+      width: 100%;
+      height: 600px;
+      object-fit: cover;
+    }
 
-    .main-container  {
+    .main-container {
       max-width: 800px;
     }
 
     @media (max-width: 700px) {
       .hero-img {
-       height: 200px;
+        height: 200px;
       }
 
-      .main-container  {
+      .main-container {
         max-width: 100%;
       }
     }
@@ -133,46 +135,49 @@ $conn->close();
         </div>
 
         <div class="d-flex flex-column gap-2 mt-4">
-        <div class="d-flex flex-row align-items-center mt-4 mb-2">
-          <h4 class="fw-bold">COMMENTS AND REVIEWS (3)</h4>
-        </div>
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-subtitle mb-2 mt-2 text-muted">Review by: John Doe</h6>
-            <div class="mb-2">
-              <span class="badge">⭐⭐⭐⭐⭐</span>
+          <div class="d-flex flex-row align-items-center mt-4 mb-2">
+            <h4 class="fw-bold">COMMENTS AND REVIEWS (3)</h4>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <h6 class="card-subtitle mb-2 mt-2 text-muted">Review by: John Doe</h6>
+              <div class="mb-2">
+                <span class="badge">⭐⭐⭐⭐⭐</span>
+              </div>
+              <p class="card-text">
+                "The event package exceeded our expectations! The venue was amazing, the staff was very professional,
+                and everything was perfectly organized. Highly recommend!"
+              </p>
+              <p class="card-text"><small class="text-muted">Reviewed on: February 4, 2025</small></p>
             </div>
-            <p class="card-text">
-              "The event package exceeded our expectations! The venue was amazing, the staff was very professional, and everything was perfectly organized. Highly recommend!"
-            </p>
-            <p class="card-text"><small class="text-muted">Reviewed on: February 4, 2025</small></p>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <h6 class="card-subtitle mb-2 mt-2 text-muted">Review by: Sarah Miller</h6>
+              <div class="mb-2">
+                <span class="badge text-dark">⭐⭐⭐⭐</span>
+              </div>
+              <p class="card-text">
+                "The event was good, but there were a few hiccups during the setup. Overall, the staff did their best to
+                ensure everything went smoothly. Would still recommend it for a great experience."
+              </p>
+              <p class="card-text"><small class="text-muted">Reviewed on: January 25, 2025</small></p>
+            </div>
+          </div>
+          <div class="card">
+            <div class="card-body">
+              <h6 class="card-subtitle mb-2 mt-2 text-muted">Review by: Emily Smith</h6>
+              <div class="mb-2">
+                <span class="badge text-dark">⭐⭐⭐⭐⭐</span>
+              </div>
+              <p class="card-text">
+                "Absolutely loved the event! Everything was well organized from start to finish. The food, the
+                entertainment, and the ambiance were fantastic. Would book again for future events!"
+              </p>
+              <p class="card-text"><small class="text-muted">Reviewed on: February 2, 2025</small></p>
+            </div>
           </div>
         </div>
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-subtitle mb-2 mt-2 text-muted">Review by: Sarah Miller</h6>
-            <div class="mb-2">
-              <span class="badge text-dark">⭐⭐⭐⭐</span>
-            </div>
-            <p class="card-text">
-              "The event was good, but there were a few hiccups during the setup. Overall, the staff did their best to ensure everything went smoothly. Would still recommend it for a great experience."
-            </p>
-            <p class="card-text"><small class="text-muted">Reviewed on: January 25, 2025</small></p>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-body">
-            <h6 class="card-subtitle mb-2 mt-2 text-muted">Review by: Emily Smith</h6>
-            <div class="mb-2">
-              <span class="badge text-dark">⭐⭐⭐⭐⭐</span>
-            </div>
-            <p class="card-text">
-              "Absolutely loved the event! Everything was well organized from start to finish. The food, the entertainment, and the ambiance were fantastic. Would book again for future events!"
-            </p>
-            <p class="card-text"><small class="text-muted">Reviewed on: February 2, 2025</small></p>
-          </div>
-        </div>
-      </div>
       </div>
     </div>
   </div>
@@ -192,12 +197,13 @@ $conn->close();
             <input class="form-control mb-2" type="date" name="event_date" readonly />
             <h6 class="fw-semibold mb-2">Event Time</h6>
             <div class="input-group mb-2">
-                <input class="form-control" type="time" name="start_time" required />
-                <span class="input-group-text">to</span>
-                <input class="form-control" type="time" name="end_time" required />
+              <input class="form-control" type="time" name="start_time" required />
+              <span class="input-group-text">to</span>
+              <input class="form-control" type="time" name="end_time" required />
             </div>
             <h6 class="fw-semibold mb-2">Event Address</h6>
-            <input class="form-control mb-2" type="text" name="event_address" required placeholder="Block 2, Lot 5, Amelia St, Bagumbayan, Bulacan" />
+            <input class="form-control mb-2" type="text" name="event_address" required
+              placeholder="Block 2, Lot 5, Amelia St, Bagumbayan, Bulacan" />
             <h6 class="fw-semibold mb-2">Client Contact Number</h6>
             <div class="input-group mb-2">
               <span class="input-group-text">+63</span>
@@ -217,8 +223,8 @@ $conn->close();
   ?>
 
   <script>
-    $(document).ready(function() {
-      $("input[name='client_contact']").on("input", function() {
+    $(document).ready(function () {
+      $("input[name='client_contact']").on("input", function () {
         this.value = this.value.replace(/[^0-9]/g, '');
 
         if (this.value.length > 10) {
@@ -227,7 +233,7 @@ $conn->close();
       });
     });
 
-    $(document).ready(function() {
+    $(document).ready(function () {
       var reservedDates = <?php echo $datesJSON; ?>;
       var userFullname = <?= json_encode($_SESSION['userfullname'] ?? '') ?>;
       var calendarEl = document.getElementById('calendar');
@@ -237,7 +243,7 @@ $conn->close();
         validRange: {
           start: moment().format('YYYY-MM-DD')
         },
-        events: reservedDates.map(function(date) {
+        events: reservedDates.map(function (date) {
           return {
             start: date,
             end: date,
@@ -245,13 +251,31 @@ $conn->close();
             backgroundColor: "#b83939"
           };
         }),
-        dateClick: function(info) {
-          var clickedDate = info.dateStr;
+        dateClick: function (info) {
+          var clickedDate = new Date(info.dateStr);
+          var today = new Date();
+          var oneMonthAhead = new Date();
+          oneMonthAhead.setDate(today.getDate() + 30); // minimum 30 days ahead
 
-          if (!reservedDates.includes(clickedDate)) {
-            // Only proceed if userFullname is defined and not empty
+          // Reset time portion for comparison
+          clickedDate.setHours(0, 0, 0, 0);
+          oneMonthAhead.setHours(0, 0, 0, 0);
+
+          if (clickedDate < oneMonthAhead) {
+            Swal.fire({
+              title: 'Select a Later Date',
+              text: 'Please select a date at least 1 month ahead. We want to be perfectly prepared for your event.',
+              icon: 'info',
+              confirmButtonText: 'OK'
+            });
+            return;
+          }
+
+          var clickedDateStr = info.dateStr;
+
+          if (!reservedDates.includes(clickedDateStr)) {
             if (userFullname && userFullname.trim() !== '') {
-              $("input[name='event_date']").val(clickedDate);
+              $("input[name='event_date']").val(clickedDateStr);
               $('#eventModal').modal('toggle');
             } else {
               Swal.fire({
@@ -269,14 +293,13 @@ $conn->close();
             }
           }
         }
-
       });
 
       calendar.render();
     });
   </script>
   <script>
-    $("#reserveform").submit(function(e) {
+    $("#reserveform").submit(function (e) {
       e.preventDefault();
 
       var formdata = new FormData(this);

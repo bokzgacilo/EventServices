@@ -41,7 +41,7 @@ if (isset($_FILES['payment_receipt']) && $_FILES['payment_receipt']['error'] ===
     $receipt_path = $destination; // This is already your final saved path
 
     // 1. Update event_reservations: set payment_status = 'Paid'
-    $updateSql = "UPDATE event_reservations SET payment_status = 'Paid' WHERE id = ?";
+    $updateSql = "UPDATE event_reservations SET payment_status = 'Partially Paid' WHERE id = ?";
     $stmtUpdate = $conn->prepare($updateSql);
     $stmtUpdate->bind_param("i", $reservation_id);
     $stmtUpdate->execute();

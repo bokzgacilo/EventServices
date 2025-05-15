@@ -13,6 +13,9 @@
     ],
     "require": {
         "phpoffice/phpspreadsheet": "^4.2",
-        "phpmailer/phpmailer": "^6.9"
+        "phpmailer/phpmailer": "^6.9",
+        "kickstartph/semaphore-client": "*",
+        "guzzlehttp/guzzle": "^7.9",
+        "twilio/sdk": "^8.6"
     }
 }
