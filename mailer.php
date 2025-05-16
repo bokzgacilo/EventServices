@@ -25,8 +25,8 @@
         $mail->isHTML(true);
         $mail->Subject = 'Complete Your Payment for Reservation #' . $reservation_id;
 
-        // $paymentLink = "https://queenandknighteventservices.site/main/payment.php?rid=$reservation_id"; // Adjust the link as needed
-        $paymentLink = "http://localhost/eventservices/main/payment.php?rid=$reservation_id"; // Adjust the link as needed
+        $paymentLink = "https://queenandknighteventservices.site/main/payment.php?rid=$reservation_id"; // Adjust the link as needed
+        // $paymentLink = "http://localhost/eventservices/main/payment.php?rid=$reservation_id"; // Adjust the link as needed
 
         $mail->Body = "
           Dear $name,<br><br>
