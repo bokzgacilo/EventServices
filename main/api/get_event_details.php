@@ -75,8 +75,10 @@ if ($stmt = $conn->prepare($sql)) {
     echo "
     <script>
         $('.image-container-modal').slick({
-          arrows: true,
-          dots: true,
+          arrows: false,
+          dots: false,
+          autoplay: true,
+          autoplaySpeed: 1000 // 1 second
         });
     </script>
     ";

@@ -64,10 +64,10 @@ if ($result->num_rows > 0) {
           </div>
           <div class="modal-body">
             <div class="row">
-              <div class="col-6 d-flex flex-column gap-2" id="event-detail-container">
-                
+              <div class="col-12 col-md-6 d-flex flex-column gap-2" id="event-detail-container">
+                <!-- Content -->
               </div>
-              <div class="col-6 d-flex flex-column">
+              <div class="col-12 col-md-6 d-flex flex-column">
                 <div id="feedbacks-container"></div>
                 <form id="feedbackForm" class="d-flex flex-row gap-2 justify-content-between align-items-start">
                   <input type="hidden" name="event_id_feedback" />
