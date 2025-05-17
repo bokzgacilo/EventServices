@@ -97,7 +97,17 @@ session_start();
             </div>
             <div class="form-group">
               <label class="form-label fw-semibold">Contact Number</label>
-              <input type="text" class="form-control" name="contact_number" placeholder="0976222095X" required>
+              <div class="input-group input-group-lg">
+                <span class="input-group-text" id="basic-addon1">+63</span>
+                <input 
+                  type="tel"
+                  class="form-control" 
+                  placeholder="976222095X" 
+                  name="contact_number" 
+                  pattern="\d{10}"
+                  maxlength="10" 
+                  required>
+              </div>
               <span>Please ensure that it is active, capable of receiving calls, and able to respond.</span>
             </div>
         </div>

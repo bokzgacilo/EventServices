@@ -288,6 +288,7 @@ $selected_user = $_SESSION['userid'];
     await push(chatRef, messageData);
     document.querySelector('.preview-container').innerHTML = '';
     inputField.value = "";
+    selectedBase64Images = [];
   })
 
   // Listen for new messages in real time
