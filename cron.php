@@ -16,12 +16,14 @@
     
     if ($result->num_rows > 0) {
       while ($row = $result->fetch_assoc()) {
+        $rowWithLabel = $row;
+        $rowWithLabel['label'] = $label;
+        print_r($rowWithLabel);
         sendReminderSms($row['id'], "+63".$row['client_contact']);
       }
     }
   }
   
-  // Run reminders for today, tomorrow, and next 7 days
   processReminders($conn, $today, 'today');
   processReminders($conn, $tomorrow, 'tomorrow');
   processReminders($conn, $nextWeek, 'next_week');
