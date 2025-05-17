@@ -42,6 +42,7 @@ if ($result->num_rows > 0) {
   $updateStmt = $conn->prepare($updateSql);
   $updateStmt->bind_param("si", $updated_status, $reservation_id);
   $updateStmt->execute();
+  
 
   echo json_encode(["status" => "success", "title" => "Event Confirmed", "description" => "Payment link sent to the email."]);
 } else {

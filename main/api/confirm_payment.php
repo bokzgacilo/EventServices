@@ -1,5 +1,9 @@
 <?php
 require 'connection.php'; // Adjust to your setup
+include_once("../../vendor/autoload.php");
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 if (isset($_POST['event_id'])) {
   $event_id = intval($_POST['event_id']);
@@ -14,21 +18,56 @@ if (isset($_POST['event_id'])) {
     echo json_encode(['status' => 'error']);
   }
 
-  $getContactSql = "SELECT client_contact FROM event_reservations WHERE id = ?";
+  $getContactSql = "SELECT client_contact, client_name, client_email FROM event_reservations WHERE id = ?";
   $stmtGetContact = $conn->prepare($getContactSql);
   $stmtGetContact->bind_param("i", $event_id);
   $stmtGetContact->execute();
   $result = $stmtGetContact->get_result();
 
   $clientNumber = "";
+  $clientName = "";
+  $clientEmail = "";
 
   if ($result->num_rows > 0) {
     $row = $result->fetch_assoc();
     $clientNumber = $row['client_contact'];
-    // Do something with $clientNumber, like send SMS
+    $clientName = $row['client_name'];
+    $clientEmail = $row['client_email'];
   } else {
-    // Handle case when no matching record is found
     $clientNumber = null;
+  }
+
+  $mail = new PHPMailer(true);
+  try {
+    // Server settings
+    $mail->isSMTP();
+    $mail->Host = 'smtp.hostinger.com';
+    $mail->SMTPAuth = true;
+    $mail->Username = 'support@queenandknighteventservices.site';
+    $mail->Password = '2/fF9>|Jk';
+    $mail->SMTPSecure = PHPMailer::ENCRYPTION_SMTPS; // 'ssl' also works
+    $mail->Port = 465;
+
+    // Recipients
+    $mail->setFrom('support@queenandknighteventservices.site', 'Queens And Knights Support');
+    $mail->addAddress($clientEmail, $clientName);
+
+    // Content
+    $mail->isHTML(true);
+    $mail->Subject = 'Reservation Confirmed!';
+
+    $mail->Body = "
+          Dear $clientName,<br><br>
+          Reservation ID: <strong>$event_id</strong><br>
+          If you have any questions or concerns, feel free to reach out to our support team.<br><br>
+          Best regards,<br>
+          Queen and Knights Event Services
+        ";
+
+
+    $mail->send();
+  } catch (Exception $e) {
+    echo "Message could not be sent. Mailer Error: {$mail->ErrorInfo}";
   }
 
   $client = new GuzzleHttp\Client();
