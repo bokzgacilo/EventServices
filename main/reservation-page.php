@@ -6,7 +6,7 @@ $reservedDates = [];
 
 include_once("api/connection.php");
 
-$get_all_reserved_dates = $conn->query("SELECT event_date FROM event_reservations");
+$get_all_reserved_dates = $conn->query("SELECT event_date FROM event_reservations WHERE payment_status='Partially Paid'");
 if ($get_all_reserved_dates->num_rows > 0) {
   while ($row = $get_all_reserved_dates->fetch_assoc()) {
     $reservedDates[] = $row['event_date'];
