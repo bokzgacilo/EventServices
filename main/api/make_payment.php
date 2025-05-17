@@ -1,5 +1,7 @@
 <?php
 include_once("connection.php");
+include_once "../../vendor/autoload.php";
+
 session_start();
 
 $userFullName = $_SESSION['userfullname'];
@@ -39,12 +41,6 @@ if (isset($_FILES['payment_receipt']) && $_FILES['payment_receipt']['error'] ===
     $payment_date = $_POST['payment_date'];
     $reference_number = $_POST['reference_number'];
     $receipt_path = $destination; // This is already your final saved path
-
-    // 1. Update event_reservations: set payment_status = 'Paid'
-    $updateSql = "UPDATE event_reservations SET payment_status = 'Partially Paid' WHERE id = ?";
-    $stmtUpdate = $conn->prepare($updateSql);
-    $stmtUpdate->bind_param("i", $reservation_id);
-    $stmtUpdate->execute();
 
     // 2. Insert into payment
     $insertSql = "INSERT INTO payments (event_id, client_name, payment_date, reference_number, receipt_path) VALUES (?, ?, ?, ?, ?)";
