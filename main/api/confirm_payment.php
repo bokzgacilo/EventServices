@@ -71,7 +71,7 @@ if (isset($_POST['event_id'])) {
   }
 
   $client = new GuzzleHttp\Client();
-  $apiKey = 'uk_amG_hB7AfEE6Jn_DrAQ9kG67x4bW_6REbbbugwjcHwbNHS4-wXzSE2UQ_QjBBlfr';
+  $apiKey = 'uk_2PIo4riJjObSbROcz4ehZ4P-HeSbnrqv5SqvvE2v1nwfnjGhjdbAiYyl1XNF9aqa';
   $devApiKey = 'uk_ir-RizoshRhFu2X-IxEoQBY_aRb56AWfUG85YFnbO-IyDzAUJRD3hMZNouQh05oj';
 
   $message = "Payment with event with an ID: $event_id is confirmed, please coordinate with Queens And Knights Event Services.";
@@ -83,7 +83,7 @@ if (isset($_POST['event_id'])) {
     'json' => [
       'content' => $message,
       'from' => '+639187885334', //default
-      'to' => $clientNumber
+      'to' => "+63".$clientNumber
     ]
   ]);
 
