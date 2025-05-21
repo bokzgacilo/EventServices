@@ -27,7 +27,7 @@
 
         $paymentLink = "https://queenandknighteventservices.site/main/payment.php?rid=$reservation_id"; // Adjust the link as needed
         // $paymentLink = "http://localhost/eventservices/main/payment.php?rid=$reservation_id"; // Adjust the link as needed
-
+        $deadline = date('F j, Y', strtotime('+5 days'));
         $mail->Body = "
           Dear $name,<br><br>
           Thank you for your reservation!<br><br>
@@ -36,6 +36,8 @@
           To confirm your booking, please settle the down payment of <strong>₱5,000</strong> using the link below:<br>
           <a href='$paymentLink'>Pay Now</a><br><br>
           <strong>Note:</strong> The remaining balance will be collected <u>after the event</u>.<br><br>
+          <strong>Important:</strong> If payment is not made by <u>$deadline</u>, your reservation will be revoked and cancelled.<br>
+          However, you may submit a new request at any time.<br><br>
           If you have any questions or concerns, feel free to reach out to our support team.<br><br>
           Best regards,<br>
           Queen and Knights Event Services
